@@ -1,0 +1,150 @@
+
+<div class="reviews-split section-padding" style="background-color: var(--color-off-white);">
+  <div class="reviews-split__container page-width">
+    {% for block in section.blocks %}
+      <div class="reviews-split__block {% if forloop.index | modulo: 2 == 0 %}reviews-split__block--reverse{% endif %}" {{ block.shopify_attributes }}>
+        <div class="reviews-split__media">
+           {% if block.settings.image != blank %}
+             {{ block.settings.image | image_url: width: 1000 | image_tag: loading: 'lazy', class: 'reviews-split__img' }}
+           {% else %}
+             {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+           {% endif %}
+        </div>
+        <div class="reviews-split__content" style="background-color: var(--color-beige-muted);">
+           <div class="reviews-split__inner">
+             <div class="reviews-split__stars">
+               {% for i in (1..5) %}
+                 <span class="star">★</span>
+               {% endfor %}
+             </div>
+             <blockquote class="reviews-split__quote h2 premium-italic">
+               "{{ block.settings.text | strip_html }}"
+             </blockquote>
+             <cite class="reviews-split__author premium-small-caps">— {{ block.settings.author }}</cite>
+             {% if block.settings.verified %}
+               <div class="reviews-split__verified premium-small-caps">Verified Purchase</div>
+             {% endif %}
+           </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .reviews-split__container {
+    display: flex;
+    flex-direction: column;
+    gap: 100px;
+  }
+  .reviews-split__block {
+    display: flex;
+    align-items: stretch;
+    min-height: 500px;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+  }
+  .reviews-split__block--reverse {
+    flex-direction: row-reverse;
+  }
+  .reviews-split__media {
+    flex: 1;
+    overflow: hidden;
+  }
+  .reviews-split__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: saturate(0.8);
+  }
+  .reviews-split__content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px;
+    text-align: center;
+  }
+  .reviews-split__inner {
+    max-width: 400px;
+  }
+  .reviews-split__stars {
+    color: var(--color-gold-muted);
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+  }
+  .reviews-split__quote {
+    line-height: 1.5;
+    margin-bottom: 30px;
+    color: var(--color-charcoal);
+  }
+  .reviews-split__author {
+    display: block;
+    margin-bottom: 15px;
+  }
+  .reviews-split__verified {
+    font-size: 0.7rem;
+    opacity: 0.6;
+  }
+  @media screen and (max-width: 749px) {
+    .reviews-split__block {
+      flex-direction: column !important;
+      min-height: auto;
+    }
+    .reviews-split__content {
+      padding: 40px 20px;
+    }
+    .reviews-split__quote {
+      font-size: 1.8rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Reviews (Premium Split)",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Reviewer Image"
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author",
+          "default": "Name"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Review Text",
+          "default": "<p>A truly exceptional piece of craftsmanship. The attention to detail is unmatched.</p>"
+        },
+        {
+          "type": "checkbox",
+          "id": "verified",
+          "label": "Verified Purchase",
+          "default": true
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Reviews (Premium Split)",
+      "blocks": [
+        { "type": "review", "settings": { "author": "Sophie L.", "text": "<p>The quality of the leather and the unique buckle mechanism is unlike anything I've used before.</p>" } },
+        { "type": "review", "settings": { "author": "Mark R.", "text": "<p>Finally, a belt that fits perfectly every single time. Reversible design is a huge plus.</p>" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

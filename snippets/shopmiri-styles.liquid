@@ -1,0 +1,55 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+  :root {
+    --font-heading-family: 'Cormorant Garamond', serif;
+    --font-body-family: 'Montserrat', sans-serif;
+    
+    --color-off-white: #F9F7F4;
+    --color-beige-muted: #EFEBE9;
+    --color-charcoal: #2C2C2C;
+    --color-gold-muted: #D1A073;
+    
+    --section-padding-large: 100px;
+    --section-padding-medium: 60px;
+  }
+
+  body {
+    background-color: var(--color-off-white);
+    color: var(--color-charcoal);
+    font-family: var(--font-body-family);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4, .h1, .h2, .h3, .h4 {
+    font-family: var(--font-heading-family);
+    font-weight: 500;
+    color: var(--color-charcoal);
+  }
+
+  .premium-italic {
+    font-family: var(--font-heading-family);
+    font-style: italic;
+  }
+
+  .premium-small-caps {
+    font-family: var(--font-body-family);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  .section-padding {
+    padding-top: var(--section-padding-large);
+    padding-bottom: var(--section-padding-large);
+  }
+
+  @media screen and (max-width: 749px) {
+    .section-padding {
+      padding-top: var(--section-padding-medium);
+      padding-bottom: var(--section-padding-medium);
+    }
+  }
+</style>
