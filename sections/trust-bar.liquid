@@ -1,0 +1,142 @@
+
+<div class="trust-bar color-{{ section.settings.color_scheme }} spacing-style" style="{% render 'spacing-style', settings: section.settings %}">
+  <div class="trust-bar__container page-width">
+    {% for block in section.blocks %}
+      <div class="trust-bar__item" {{ block.shopify_attributes }}>
+        {% if block.settings.icon != blank %}
+          <div class="trust-bar__icon">
+            {{ block.settings.icon | image_url: width: 40 | image_tag: loading: 'lazy' }}
+          </div>
+        {% endif %}
+        <div class="trust-bar__text">
+          {{ block.settings.text }}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .trust-bar {
+    border-top: 1px solid rgba(var(--color-foreground), 0.1);
+    border-bottom: 1px solid rgba(var(--color-foreground), 0.1);
+  }
+  .trust-bar__container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    gap: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+  .trust-bar__item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+  }
+  .trust-bar__icon img {
+    display: block;
+    max-width: 30px;
+    height: auto;
+  }
+  .trust-bar__text {
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  @media screen and (max-width: 749px) {
+    .trust-bar__container {
+      flex-direction: column;
+      gap: 15px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Trust Bar",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 10
+    }
+  ],
+  "blocks": [
+    {
+      "type": "trust_item",
+      "name": "Trust Item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Trust Marker</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Trust Bar",
+      "blocks": [
+        {
+          "type": "trust_item",
+          "settings": {
+            "text": "<p>100% Vegan</p>"
+          }
+        },
+        {
+          "type": "trust_item",
+          "settings": {
+            "text": "<p>Cruelty Free</p>"
+          }
+        },
+        {
+          "type": "trust_item",
+          "settings": {
+            "text": "<p>Same Day Dispatch</p>"
+          }
+        },
+        {
+          "type": "trust_item",
+          "settings": {
+            "text": "<p>4.8 Rating</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

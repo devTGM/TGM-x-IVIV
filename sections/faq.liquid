@@ -1,0 +1,151 @@
+
+<div class="faq color-{{ section.settings.color_scheme }} spacing-style" style="{% render 'spacing-style', settings: section.settings %}">
+  <div class="faq__container page-width page-width--narrow">
+    {% if section.settings.title != blank %}
+      <h2 class="faq__title {{ section.settings.heading_size }}">{{ section.settings.title }}</h2>
+    {% endif %}
+    
+    <div class="faq__items">
+      {% for block in section.blocks %}
+        <details class="faq__item" {{ block.shopify_attributes }}>
+          <summary class="faq__question">
+            <span class="faq__question-text">{{ block.settings.question }}</span>
+            <span class="faq__icon">
+              {% render 'icon', icon: 'chevron-down' %}
+            </span>
+          </summary>
+          <div class="faq__answer rte">
+            {{ block.settings.answer }}
+          </div>
+        </details>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .faq__title {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .faq__items {
+    max-width: 800px;
+    margin: 0 auto;
+    border-top: 1px solid rgba(var(--color-foreground), 0.1);
+  }
+  .faq__item {
+    border-bottom: 1px solid rgba(var(--color-foreground), 0.1);
+  }
+  .faq__question {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    cursor: pointer;
+    list-style: none;
+    font-weight: 600;
+    font-size: 1.1rem;
+    position: relative;
+  }
+  .faq__question::-webkit-details-marker {
+    display: none;
+  }
+  .faq__icon {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.3s ease;
+  }
+  .faq__item[open] .faq__icon {
+    transform: rotate(180deg);
+  }
+  .faq__answer {
+    padding-bottom: 20px;
+    opacity: 0.9;
+    line-height: 1.6;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "FAQ",
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "Title",
+      "default": "Frequently Asked Questions"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading Size",
+      "options": [
+        { "value": "h2", "label": "Small" },
+        { "value": "h1", "label": "Medium" },
+        { "value": "h0", "label": "Large" }
+      ],
+      "default": "h1"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 48
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq_item",
+      "name": "FAQ Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "What is your return policy?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer",
+          "default": "<p>We offer a 30-day return policy for all unused products.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ",
+      "blocks": [
+        { "type": "faq_item" },
+        { "type": "faq_item" },
+        { "type": "faq_item" }
+      ]
+    }
+  ]
+}
+{% endschema %}

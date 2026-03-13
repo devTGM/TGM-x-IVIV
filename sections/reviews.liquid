@@ -1,0 +1,278 @@
+
+<div class="reviews color-{{ section.settings.color_scheme }} spacing-style" style="{% render 'spacing-style', settings: section.settings %}">
+  <div class="reviews__container page-width">
+    {% if section.settings.title != blank %}
+      <div class="reviews__header">
+        <h2 class="reviews__title {{ section.settings.heading_size }}">{{ section.settings.title }}</h2>
+        {% if section.settings.show_google_badge %}
+          <div class="reviews__google-badge">
+            <span class="reviews__google-icon">{% render 'icon', icon: 'google' %}</span>
+            <span class="reviews__google-text">Reviews</span>
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+    
+    <div class="reviews__grid grid grid--{{ section.settings.columns }}-col-desktop grid--1-col-tablet-down">
+      {% for block in section.blocks %}
+        <div class="reviews__item grid__item" {{ block.shopify_attributes }}>
+          <div class="reviews__card shadow-sm color-{{ block.settings.color_scheme }}">
+            <div class="reviews__meta">
+              <div class="reviews__author-info">
+                {% if block.settings.author_image != blank %}
+                  {{ block.settings.author_image | image_url: width: 100 | image_tag: loading: 'lazy', class: 'reviews__author-img' }}
+                {% else %}
+                  <div class="reviews__author-initial">{{ block.settings.author | slice: 0 }}</div>
+                {% endif %}
+                <div class="reviews__author-details">
+                  <span class="reviews__author-name">{{ block.settings.author }}</span>
+                  <span class="reviews__date">{{ block.settings.date }}</span>
+                </div>
+              </div>
+              <div class="reviews__rating">
+                {% for i in (1..5) %}
+                  <span class="reviews__star {% if i <= block.settings.rating %}reviews__star--filled{% endif %}">★</span>
+                {% endfor %}
+              </div>
+            </div>
+            <div class="reviews__content rte">
+              {{ block.settings.text }}
+            </div>
+            {% if block.settings.show_verified_badge %}
+              <div class="reviews__verified">
+                {% render 'icon', icon: 'check-circle' %} Verified
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .reviews__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    gap: 20px;
+  }
+  .reviews__google-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: rgba(var(--color-foreground), 0.05);
+    border-radius: 20px;
+    font-weight: bold;
+  }
+  .reviews__card {
+    padding: 24px;
+    border-radius: 12px;
+    background: rgba(var(--color-foreground), 0.03);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  .reviews__author-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .reviews__author-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  .reviews__author-initial {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  .reviews__author-details {
+    display: flex;
+    flex-direction: column;
+  }
+  .reviews__author-name {
+    font-weight: bold;
+    font-size: 1rem;
+  }
+  .reviews__date {
+    font-size: 0.8rem;
+    opacity: 0.6;
+  }
+  .reviews__rating {
+    display: flex;
+    gap: 2px;
+    color: #fbbc04; /* Google Star Color */
+    font-size: 1.2rem;
+  }
+  .reviews__star--filled {
+    color: #fbbc04;
+  }
+  .reviews__star:not(.reviews__star--filled) {
+    color: #ccc;
+  }
+  .reviews__content {
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+  .reviews__verified {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.8rem;
+    color: #34a853; /* Google Green */
+    font-weight: 500;
+  }
+  @media screen and (max-width: 749px) {
+    .reviews__header {
+      flex-direction: column;
+      text-align: center;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Reviews",
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "Title",
+      "default": "What Our Customers Say"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading Size",
+      "options": [
+        { "value": "h2", "label": "Small" },
+        { "value": "h1", "label": "Medium" },
+        { "value": "h0", "label": "Large" }
+      ],
+      "default": "h1"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_google_badge",
+      "label": "Show Google Badge",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "label": "Columns on Desktop",
+      "default": 3
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 48
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author",
+          "default": "John Doe"
+        },
+        {
+          "type": "image_picker",
+          "id": "author_image",
+          "label": "Author Image"
+        },
+        {
+          "type": "text",
+          "id": "date",
+          "label": "Date",
+          "default": "2 days ago"
+        },
+        {
+          "type": "range",
+          "id": "rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "label": "Rating",
+          "default": 5
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Review Text",
+          "default": "<p>Excellent product! Very high quality and fast shipping.</p>"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_verified_badge",
+          "label": "Show Verified Badge",
+          "default": true
+        },
+        {
+          "type": "color_scheme",
+          "id": "color_scheme",
+          "label": "Color Scheme",
+          "default": "scheme-1"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Reviews",
+      "blocks": [
+        { "type": "review" },
+        { "type": "review" },
+        { "type": "review" }
+      ]
+    }
+  ]
+}
+{% endschema %}
