@@ -1,0 +1,702 @@
+{% doc %}
+  @prompt
+    Need a section which shows all the discounts and offers available and discount codes are presented with dotted line and can be copied, They should be aligned horizontal on mobile as well as desktop, They should be aligned horizontal on mobile as well as desktop, I need less space between heading and discount codes and make the heading "Available Discounts" with a price tag icon.
+    Also add a hover effect on discount code card, Make the Text left aligned for heading
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-discounts-offers-{{ ai_gen_id }} {
+    padding: {{ block.settings.section_padding }}px 0;
+    background-color: {{ block.settings.background_color }};
+  }
+
+  .ai-discounts-offers__container-{{ ai_gen_id }} {
+    max-width: {{ block.settings.max_width }}px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .ai-discounts-offers__header-{{ ai_gen_id }} {
+    text-align: left;
+    margin-bottom: 24px;
+  }
+
+  .ai-discounts-offers__title-wrapper-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+
+  .ai-discounts-offers__title-icon-{{ ai_gen_id }} {
+    width: {{ block.settings.title_size | times: 0.9 }}px;
+    height: {{ block.settings.title_size | times: 0.9 }}px;
+    color: {{ block.settings.title_color }};
+  }
+
+  .ai-discounts-offers__title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.title_size }}px;
+    color: {{ block.settings.title_color }};
+    margin: 0;
+  }
+
+  .ai-discounts-offers__subtitle-{{ ai_gen_id }} {
+    font-size: {{ block.settings.subtitle_size }}px;
+    color: {{ block.settings.subtitle_color }};
+    margin: 0;
+  }
+
+  .ai-discounts-offers__scroll-container-{{ ai_gen_id }} {
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: {{ block.settings.card_border_color }} transparent;
+    margin: 0 -20px;
+    padding: 0 20px;
+  }
+
+  .ai-discounts-offers__scroll-container-{{ ai_gen_id }}::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  .ai-discounts-offers__scroll-container-{{ ai_gen_id }}::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .ai-discounts-offers__scroll-container-{{ ai_gen_id }}::-webkit-scrollbar-thumb {
+    background-color: {{ block.settings.card_border_color }};
+    border-radius: 4px;
+  }
+
+  .ai-discounts-offers__grid-{{ ai_gen_id }} {
+    display: flex;
+    gap: 20px;
+    padding-bottom: 10px;
+  }
+
+  .ai-discounts-offers__card-{{ ai_gen_id }} {
+    background-color: {{ block.settings.card_background }};
+    border-radius: {{ block.settings.card_border_radius }}px;
+    padding: 24px;
+    border: {{ block.settings.card_border_width }}px solid {{ block.settings.card_border_color }};
+    min-width: 280px;
+    flex-shrink: 0;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .ai-discounts-offers__card-{{ ai_gen_id }}:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  }
+
+  .ai-discounts-offers__card-title-{{ ai_gen_id }} {
+    font-size: 20px;
+    color: {{ block.settings.card_title_color }};
+    margin: 0 0 8px;
+    font-weight: 600;
+  }
+
+  .ai-discounts-offers__card-description-{{ ai_gen_id }} {
+    font-size: 14px;
+    color: {{ block.settings.card_text_color }};
+    margin: 0 0 16px;
+    line-height: 1.5;
+  }
+
+  .ai-discounts-offers__code-wrapper-{{ ai_gen_id }} {
+    position: relative;
+  }
+
+  .ai-discounts-offers__code-container-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background-color: {{ block.settings.code_background }};
+    border: 2px dashed {{ block.settings.code_border_color }};
+    border-radius: {{ block.settings.code_border_radius }}px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .ai-discounts-offers__code-container-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.code_hover_background }};
+    border-color: {{ block.settings.code_hover_border }};
+    transform: scale(1.02);
+  }
+
+  .ai-discounts-offers__code-text-{{ ai_gen_id }} {
+    font-size: 16px;
+    font-weight: 600;
+    color: {{ block.settings.code_text_color }};
+    letter-spacing: 1px;
+    font-family: monospace;
+  }
+
+  .ai-discounts-offers__copy-icon-{{ ai_gen_id }} {
+    width: 20px;
+    height: 20px;
+    color: {{ block.settings.code_text_color }};
+    flex-shrink: 0;
+  }
+
+  .ai-discounts-offers__copied-message-{{ ai_gen_id }} {
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: {{ block.settings.copied_message_bg }};
+    color: {{ block.settings.copied_message_text }};
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    white-space: nowrap;
+  }
+
+  .ai-discounts-offers__copied-message-{{ ai_gen_id }}.active {
+    opacity: 1;
+  }
+
+  .ai-discounts-offers__validity-{{ ai_gen_id }} {
+    margin-top: 12px;
+    font-size: 12px;
+    color: {{ block.settings.validity_text_color }};
+    text-align: center;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-discounts-offers__title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.title_size | times: 0.8 }}px;
+    }
+
+    .ai-discounts-offers__title-icon-{{ ai_gen_id }} {
+      width: {{ block.settings.title_size | times: 0.7 }}px;
+      height: {{ block.settings.title_size | times: 0.7 }}px;
+    }
+
+    .ai-discounts-offers__card-{{ ai_gen_id }} {
+      min-width: 260px;
+    }
+  }
+{% endstyle %}
+
+<discount-offers-{{ ai_gen_id }} class="ai-discounts-offers-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-discounts-offers__container-{{ ai_gen_id }}">
+    {% if block.settings.title != blank or block.settings.subtitle != blank %}
+      <div class="ai-discounts-offers__header-{{ ai_gen_id }}">
+        {% if block.settings.title != blank %}
+          <div class="ai-discounts-offers__title-wrapper-{{ ai_gen_id }}">
+            <svg class="ai-discounts-offers__title-icon-{{ ai_gen_id }}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+              <line x1="7" y1="7" x2="7.01" y2="7"></line>
+            </svg>
+            <h2 class="ai-discounts-offers__title-{{ ai_gen_id }}">{{ block.settings.title }}</h2>
+          </div>
+        {% endif %}
+        {% if block.settings.subtitle != blank %}
+          <p class="ai-discounts-offers__subtitle-{{ ai_gen_id }}">{{ block.settings.subtitle }}</p>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <div class="ai-discounts-offers__scroll-container-{{ ai_gen_id }}">
+      <div class="ai-discounts-offers__grid-{{ ai_gen_id }}">
+        {% for i in (1..6) %}
+          {% liquid
+            assign offer_enabled_key = 'offer_' | append: i | append: '_enabled'
+            assign offer_title_key = 'offer_' | append: i | append: '_title'
+            assign offer_description_key = 'offer_' | append: i | append: '_description'
+            assign offer_code_key = 'offer_' | append: i | append: '_code'
+            assign offer_validity_key = 'offer_' | append: i | append: '_validity'
+
+            assign offer_enabled = block.settings[offer_enabled_key]
+            assign offer_title = block.settings[offer_title_key]
+            assign offer_description = block.settings[offer_description_key]
+            assign offer_code = block.settings[offer_code_key]
+            assign offer_validity = block.settings[offer_validity_key]
+          %}
+
+          {% if offer_enabled and offer_code != blank %}
+            <div class="ai-discounts-offers__card-{{ ai_gen_id }}">
+              {% if offer_title != blank %}
+                <h3 class="ai-discounts-offers__card-title-{{ ai_gen_id }}">{{ offer_title }}</h3>
+              {% endif %}
+              {% if offer_description != blank %}
+                <p class="ai-discounts-offers__card-description-{{ ai_gen_id }}">{{ offer_description }}</p>
+              {% endif %}
+              <div class="ai-discounts-offers__code-wrapper-{{ ai_gen_id }}">
+                <div 
+                  class="ai-discounts-offers__code-container-{{ ai_gen_id }}" 
+                  data-code="{{ offer_code }}"
+                  role="button"
+                  tabindex="0"
+                  aria-label="Copy discount code {{ offer_code }}"
+                >
+                  <span class="ai-discounts-offers__code-text-{{ ai_gen_id }}">{{ offer_code }}</span>
+                  <svg class="ai-discounts-offers__copy-icon-{{ ai_gen_id }}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                </div>
+                <div class="ai-discounts-offers__copied-message-{{ ai_gen_id }}">{{ block.settings.copied_message }}</div>
+              </div>
+              {% if offer_validity != blank %}
+                <p class="ai-discounts-offers__validity-{{ ai_gen_id }}">{{ offer_validity }}</p>
+              {% endif %}
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</discount-offers-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class DiscountOffers{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.codeContainers = this.querySelectorAll('.ai-discounts-offers__code-container-{{ ai_gen_id }}');
+        this.setupEventListeners();
+      }
+
+      setupEventListeners() {
+        this.codeContainers.forEach((container) => {
+          container.addEventListener('click', () => this.copyCode(container));
+          container.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              this.copyCode(container);
+            }
+          });
+        });
+      }
+
+      copyCode(container) {
+        const code = container.getAttribute('data-code');
+        const copiedMessage = container.nextElementSibling;
+
+        navigator.clipboard.writeText(code).then(() => {
+          copiedMessage.classList.add('active');
+          
+          setTimeout(() => {
+            copiedMessage.classList.remove('active');
+          }, 2000);
+        }).catch((err) => {
+          console.error('Failed to copy code:', err);
+        });
+      }
+    }
+
+    customElements.define('discount-offers-{{ ai_gen_id }}', DiscountOffers{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Discounts and offers",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section header"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Available Discounts"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Save more with our exclusive discount codes"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "min": 16,
+      "max": 72,
+      "step": 2,
+      "unit": "px",
+      "label": "Title size",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "subtitle_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Subtitle size",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Section style"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#f5f5f5"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "subtitle_color",
+      "label": "Subtitle color",
+      "default": "#666666"
+    },
+    {
+      "type": "range",
+      "id": "section_padding",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Padding",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 600,
+      "max": 1400,
+      "step": 50,
+      "unit": "px",
+      "label": "Maximum width",
+      "default": 1200
+    },
+    {
+      "type": "header",
+      "content": "Card style"
+    },
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "card_border_color",
+      "label": "Border color",
+      "default": "#e6e6e6"
+    },
+    {
+      "type": "range",
+      "id": "card_border_width",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "label": "Border width",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "min": 0,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 8
+    },
+    {
+      "type": "color",
+      "id": "card_title_color",
+      "label": "Title color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "card_text_color",
+      "label": "Text color",
+      "default": "#666666"
+    },
+    {
+      "type": "header",
+      "content": "Discount code style"
+    },
+    {
+      "type": "color",
+      "id": "code_background",
+      "label": "Background",
+      "default": "#f9f9f9"
+    },
+    {
+      "type": "color",
+      "id": "code_hover_background",
+      "label": "Hover background",
+      "default": "#eeeeee"
+    },
+    {
+      "type": "color",
+      "id": "code_border_color",
+      "label": "Border color",
+      "default": "#a42325"
+    },
+    {
+      "type": "color",
+      "id": "code_hover_border",
+      "label": "Hover border color",
+      "default": "#780406"
+    },
+    {
+      "type": "color",
+      "id": "code_text_color",
+      "label": "Text color",
+      "default": "#a42325"
+    },
+    {
+      "type": "range",
+      "id": "code_border_radius",
+      "min": 0,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Copy feedback"
+    },
+    {
+      "type": "text",
+      "id": "copied_message",
+      "label": "Copied message",
+      "default": "Code copied!"
+    },
+    {
+      "type": "color",
+      "id": "copied_message_bg",
+      "label": "Message background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "copied_message_text",
+      "label": "Message text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "validity_text_color",
+      "label": "Validity text color",
+      "default": "#999999"
+    },
+    {
+      "type": "header",
+      "content": "Offer 1"
+    },
+    {
+      "type": "checkbox",
+      "id": "offer_1_enabled",
+      "label": "Enable offer 1",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "offer_1_title",
+      "label": "Title",
+      "default": "Welcome Discount"
+    },
+    {
+      "type": "textarea",
+      "id": "offer_1_description",
+      "label": "Description",
+      "default": "Get 10% off on your first order"
+    },
+    {
+      "type": "text",
+      "id": "offer_1_code",
+      "label": "Discount code",
+      "default": "WELCOME10"
+    },
+    {
+      "type": "text",
+      "id": "offer_1_validity",
+      "label": "Validity"
+    },
+    {
+      "type": "header",
+      "content": "Offer 2"
+    },
+    {
+      "type": "checkbox",
+      "id": "offer_2_enabled",
+      "label": "Enable offer 2",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "offer_2_title",
+      "label": "Title",
+      "default": "Free Shipping"
+    },
+    {
+      "type": "textarea",
+      "id": "offer_2_description",
+      "label": "Description",
+      "default": "Free shipping on orders above ₹999"
+    },
+    {
+      "type": "text",
+      "id": "offer_2_code",
+      "label": "Discount code",
+      "default": "FREESHIP"
+    },
+    {
+      "type": "text",
+      "id": "offer_2_validity",
+      "label": "Validity"
+    },
+    {
+      "type": "header",
+      "content": "Offer 3"
+    },
+    {
+      "type": "checkbox",
+      "id": "offer_3_enabled",
+      "label": "Enable offer 3",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "offer_3_title",
+      "label": "Title",
+      "default": "Seasonal Sale"
+    },
+    {
+      "type": "textarea",
+      "id": "offer_3_description",
+      "label": "Description",
+      "default": "Save 20% on all seasonal items"
+    },
+    {
+      "type": "text",
+      "id": "offer_3_code",
+      "label": "Discount code",
+      "default": "SEASON20"
+    },
+    {
+      "type": "text",
+      "id": "offer_3_validity",
+      "label": "Validity"
+    },
+    {
+      "type": "header",
+      "content": "Offer 4"
+    },
+    {
+      "type": "checkbox",
+      "id": "offer_4_enabled",
+      "label": "Enable offer 4",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "offer_4_title",
+      "label": "Title"
+    },
+    {
+      "type": "textarea",
+      "id": "offer_4_description",
+      "label": "Description"
+    },
+    {
+      "type": "text",
+      "id": "offer_4_code",
+      "label": "Discount code"
+    },
+    {
+      "type": "text",
+      "id": "offer_4_validity",
+      "label": "Validity"
+    },
+    {
+      "type": "header",
+      "content": "Offer 5"
+    },
+    {
+      "type": "checkbox",
+      "id": "offer_5_enabled",
+      "label": "Enable offer 5",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "offer_5_title",
+      "label": "Title"
+    },
+    {
+      "type": "textarea",
+      "id": "offer_5_description",
+      "label": "Description"
+    },
+    {
+      "type": "text",
+      "id": "offer_5_code",
+      "label": "Discount code"
+    },
+    {
+      "type": "text",
+      "id": "offer_5_validity",
+      "label": "Validity"
+    },
+    {
+      "type": "header",
+      "content": "Offer 6"
+    },
+    {
+      "type": "checkbox",
+      "id": "offer_6_enabled",
+      "label": "Enable offer 6",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "offer_6_title",
+      "label": "Title"
+    },
+    {
+      "type": "textarea",
+      "id": "offer_6_description",
+      "label": "Description"
+    },
+    {
+      "type": "text",
+      "id": "offer_6_code",
+      "label": "Discount code"
+    },
+    {
+      "type": "text",
+      "id": "offer_6_validity",
+      "label": "Validity"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Discounts and offers"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,814 @@
+{% doc %}
+  @prompt
+    I want a section where I can put multiple subsections as tabs, tabs should not look like buttons. The tabs can be connected to metafields like Country of Origin, Dimensions and Manufacturer, I need alignment option along with animation options
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-tabs-container-{{ ai_gen_id }} {
+    width: 100%;
+    max-width: 100%;
+    padding: {{ block.settings.section_padding }}px 0;
+  }
+
+  .ai-tabs-nav-{{ ai_gen_id }} {
+    display: flex;
+    gap: {{ block.settings.tab_spacing }}px;
+    border-bottom: {{ block.settings.border_width }}px solid {{ block.settings.border_color }};
+    margin-bottom: {{ block.settings.content_spacing }}px;
+    flex-wrap: wrap;
+    {% if block.settings.tab_alignment == 'left' %}
+      justify-content: flex-start;
+    {% elsif block.settings.tab_alignment == 'center' %}
+      justify-content: center;
+    {% elsif block.settings.tab_alignment == 'right' %}
+      justify-content: flex-end;
+    {% endif %}
+  }
+
+  .ai-tab-button-{{ ai_gen_id }} {
+    background: none;
+    border: none;
+    padding: {{ block.settings.tab_padding_vertical }}px {{ block.settings.tab_padding_horizontal }}px;
+    cursor: pointer;
+    font-size: {{ block.settings.tab_font_size }}px;
+    color: {{ block.settings.tab_text_color }};
+    position: relative;
+    transition: color 0.3s ease;
+    border-bottom: {{ block.settings.active_indicator_height }}px solid transparent;
+    margin-bottom: -{{ block.settings.border_width }}px;
+    {% if block.settings.tab_text_transform == 'uppercase' %}
+      text-transform: uppercase;
+    {% endif %}
+  }
+
+  .ai-tab-button-{{ ai_gen_id }}:hover {
+    color: {{ block.settings.tab_hover_color }};
+  }
+
+  .ai-tab-button-{{ ai_gen_id }}.active {
+    color: {{ block.settings.tab_active_color }};
+    border-bottom-color: {{ block.settings.active_indicator_color }};
+  }
+
+  .ai-tabs-content-{{ ai_gen_id }} {
+    position: relative;
+    {% if block.settings.content_alignment == 'left' %}
+      text-align: left;
+    {% elsif block.settings.content_alignment == 'center' %}
+      text-align: center;
+    {% elsif block.settings.content_alignment == 'right' %}
+      text-align: right;
+    {% endif %}
+  }
+
+  .ai-tab-panel-{{ ai_gen_id }} {
+    display: none;
+  }
+
+  .ai-tab-panel-{{ ai_gen_id }}.active {
+    display: block;
+    {% if block.settings.animation_type == 'fade' %}
+      animation: ai-fade-in-{{ ai_gen_id }} {{ block.settings.animation_duration }}s ease-in-out;
+    {% elsif block.settings.animation_type == 'slide' %}
+      animation: ai-slide-in-{{ ai_gen_id }} {{ block.settings.animation_duration }}s ease-in-out;
+    {% elsif block.settings.animation_type == 'scale' %}
+      animation: ai-scale-in-{{ ai_gen_id }} {{ block.settings.animation_duration }}s ease-in-out;
+    {% endif %}
+  }
+
+  {% if block.settings.animation_type == 'fade' %}
+    @keyframes ai-fade-in-{{ ai_gen_id }} {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+  {% elsif block.settings.animation_type == 'slide' %}
+    @keyframes ai-slide-in-{{ ai_gen_id }} {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  {% elsif block.settings.animation_type == 'scale' %}
+    @keyframes ai-scale-in-{{ ai_gen_id }} {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+  {% endif %}
+
+  .ai-tab-content-{{ ai_gen_id }} {
+    color: {{ block.settings.content_text_color }};
+    font-size: {{ block.settings.content_font_size }}px;
+    line-height: 1.6;
+  }
+
+  .ai-tab-content-{{ ai_gen_id }} h3 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    color: {{ block.settings.content_heading_color }};
+  }
+
+  .ai-tab-empty-{{ ai_gen_id }} {
+    padding: 40px 20px;
+    text-align: center;
+    color: #999;
+    font-style: italic;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-tabs-nav-{{ ai_gen_id }} {
+      gap: {{ block.settings.tab_spacing | times: 0.7 }}px;
+      {% if block.settings.mobile_tab_alignment == 'left' %}
+        justify-content: flex-start;
+      {% elsif block.settings.mobile_tab_alignment == 'center' %}
+        justify-content: center;
+      {% elsif block.settings.mobile_tab_alignment == 'right' %}
+        justify-content: flex-end;
+      {% elsif block.settings.mobile_tab_alignment == 'stack' %}
+        flex-direction: column;
+        align-items: stretch;
+      {% endif %}
+    }
+
+    .ai-tab-button-{{ ai_gen_id }} {
+      font-size: {{ block.settings.tab_font_size | times: 0.9 }}px;
+      padding: {{ block.settings.tab_padding_vertical | times: 0.8 }}px {{ block.settings.tab_padding_horizontal | times: 0.8 }}px;
+    }
+
+    .ai-tab-content-{{ ai_gen_id }} {
+      font-size: {{ block.settings.content_font_size | times: 0.95 }}px;
+    }
+
+    {% if block.settings.mobile_tab_alignment == 'stack' %}
+      .ai-tab-button-{{ ai_gen_id }} {
+        width: 100%;
+        text-align: left;
+        border-bottom: none;
+        border-left: {{ block.settings.active_indicator_height }}px solid transparent;
+        margin-bottom: 0;
+        margin-left: -{{ block.settings.border_width }}px;
+      }
+
+      .ai-tab-button-{{ ai_gen_id }}.active {
+        border-bottom-color: transparent;
+        border-left-color: {{ block.settings.active_indicator_color }};
+      }
+    {% endif %}
+  }
+{% endstyle %}
+
+<product-tabs-{{ ai_gen_id }} class="ai-tabs-container-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-tabs-nav-{{ ai_gen_id }}" role="tablist">
+    {% if block.settings.tab_1_enabled %}
+      <button
+        class="ai-tab-button-{{ ai_gen_id }} active"
+        role="tab"
+        aria-selected="true"
+        aria-controls="ai-tab-panel-1-{{ ai_gen_id }}"
+        data-tab="1"
+      >
+        {{ block.settings.tab_1_title }}
+      </button>
+    {% endif %}
+
+    {% if block.settings.tab_2_enabled %}
+      <button
+        class="ai-tab-button-{{ ai_gen_id }}"
+        role="tab"
+        aria-selected="false"
+        aria-controls="ai-tab-panel-2-{{ ai_gen_id }}"
+        data-tab="2"
+      >
+        {{ block.settings.tab_2_title }}
+      </button>
+    {% endif %}
+
+    {% if block.settings.tab_3_enabled %}
+      <button
+        class="ai-tab-button-{{ ai_gen_id }}"
+        role="tab"
+        aria-selected="false"
+        aria-controls="ai-tab-panel-3-{{ ai_gen_id }}"
+        data-tab="3"
+      >
+        {{ block.settings.tab_3_title }}
+      </button>
+    {% endif %}
+
+    {% if block.settings.tab_4_enabled %}
+      <button
+        class="ai-tab-button-{{ ai_gen_id }}"
+        role="tab"
+        aria-selected="false"
+        aria-controls="ai-tab-panel-4-{{ ai_gen_id }}"
+        data-tab="4"
+      >
+        {{ block.settings.tab_4_title }}
+      </button>
+    {% endif %}
+  </div>
+
+  <div class="ai-tabs-content-{{ ai_gen_id }}">
+    {% if block.settings.tab_1_enabled %}
+      <div
+        class="ai-tab-panel-{{ ai_gen_id }} active"
+        role="tabpanel"
+        id="ai-tab-panel-1-{{ ai_gen_id }}"
+        data-panel="1"
+      >
+        <div class="ai-tab-content-{{ ai_gen_id }}">
+          {% if block.settings.tab_1_content_type == 'metafield' and block.settings.tab_1_metafield != blank %}
+            {{ block.settings.tab_1_metafield }}
+          {% elsif block.settings.tab_1_content_type == 'richtext' and block.settings.tab_1_richtext != blank %}
+            {{ block.settings.tab_1_richtext }}
+          {% else %}
+            <div class="ai-tab-empty-{{ ai_gen_id }}">
+              Add content for this tab in the block settings
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+
+    {% if block.settings.tab_2_enabled %}
+      <div
+        class="ai-tab-panel-{{ ai_gen_id }}"
+        role="tabpanel"
+        id="ai-tab-panel-2-{{ ai_gen_id }}"
+        data-panel="2"
+      >
+        <div class="ai-tab-content-{{ ai_gen_id }}">
+          {% if block.settings.tab_2_content_type == 'metafield' and block.settings.tab_2_metafield != blank %}
+            {{ block.settings.tab_2_metafield }}
+          {% elsif block.settings.tab_2_content_type == 'richtext' and block.settings.tab_2_richtext != blank %}
+            {{ block.settings.tab_2_richtext }}
+          {% else %}
+            <div class="ai-tab-empty-{{ ai_gen_id }}">
+              Add content for this tab in the block settings
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+
+    {% if block.settings.tab_3_enabled %}
+      <div
+        class="ai-tab-panel-{{ ai_gen_id }}"
+        role="tabpanel"
+        id="ai-tab-panel-3-{{ ai_gen_id }}"
+        data-panel="3"
+      >
+        <div class="ai-tab-content-{{ ai_gen_id }}">
+          {% if block.settings.tab_3_content_type == 'metafield' and block.settings.tab_3_metafield != blank %}
+            {{ block.settings.tab_3_metafield }}
+          {% elsif block.settings.tab_3_content_type == 'richtext' and block.settings.tab_3_richtext != blank %}
+            {{ block.settings.tab_3_richtext }}
+          {% else %}
+            <div class="ai-tab-empty-{{ ai_gen_id }}">
+              Add content for this tab in the block settings
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+
+    {% if block.settings.tab_4_enabled %}
+      <div
+        class="ai-tab-panel-{{ ai_gen_id }}"
+        role="tabpanel"
+        id="ai-tab-panel-4-{{ ai_gen_id }}"
+        data-panel="4"
+      >
+        <div class="ai-tab-content-{{ ai_gen_id }}">
+          {% if block.settings.tab_4_content_type == 'metafield' and block.settings.tab_4_metafield != blank %}
+            {{ block.settings.tab_4_metafield }}
+          {% elsif block.settings.tab_4_content_type == 'richtext' and block.settings.tab_4_richtext != blank %}
+            {{ block.settings.tab_4_richtext }}
+          {% else %}
+            <div class="ai-tab-empty-{{ ai_gen_id }}">
+              Add content for this tab in the block settings
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</product-tabs-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class ProductTabs{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.tabButtons = this.querySelectorAll('.ai-tab-button-{{ ai_gen_id }}');
+        this.tabPanels = this.querySelectorAll('.ai-tab-panel-{{ ai_gen_id }}');
+        this.setupEventListeners();
+      }
+
+      setupEventListeners() {
+        this.tabButtons.forEach((button) => {
+          button.addEventListener('click', (e) => {
+            const tabId = e.currentTarget.getAttribute('data-tab');
+            this.switchTab(tabId);
+          });
+        });
+      }
+
+      switchTab(tabId) {
+        this.tabButtons.forEach((button) => {
+          const isActive = button.getAttribute('data-tab') === tabId;
+          button.classList.toggle('active', isActive);
+          button.setAttribute('aria-selected', isActive);
+        });
+
+        this.tabPanels.forEach((panel) => {
+          const isActive = panel.getAttribute('data-panel') === tabId;
+          if (isActive) {
+            panel.classList.add('active');
+          } else {
+            panel.classList.remove('active');
+          }
+        });
+      }
+    }
+
+    customElements.define('product-tabs-{{ ai_gen_id }}', ProductTabs{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Product tabs",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Tab 1"
+    },
+    {
+      "type": "checkbox",
+      "id": "tab_1_enabled",
+      "label": "Enable tab 1",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "tab_1_title",
+      "label": "Tab title",
+      "default": "Country of Origin"
+    },
+    {
+      "type": "select",
+      "id": "tab_1_content_type",
+      "label": "Content type",
+      "options": [
+        {
+          "value": "metafield",
+          "label": "Metafield"
+        },
+        {
+          "value": "richtext",
+          "label": "Rich text"
+        }
+      ],
+      "default": "metafield"
+    },
+    {
+      "type": "text",
+      "id": "tab_1_metafield",
+      "label": "Metafield namespace and key",
+      "info": "Example: custom.country_of_origin"
+    },
+    {
+      "type": "richtext",
+      "id": "tab_1_richtext",
+      "label": "Rich text content"
+    },
+    {
+      "type": "header",
+      "content": "Tab 2"
+    },
+    {
+      "type": "checkbox",
+      "id": "tab_2_enabled",
+      "label": "Enable tab 2",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "tab_2_title",
+      "label": "Tab title",
+      "default": "Dimensions"
+    },
+    {
+      "type": "select",
+      "id": "tab_2_content_type",
+      "label": "Content type",
+      "options": [
+        {
+          "value": "metafield",
+          "label": "Metafield"
+        },
+        {
+          "value": "richtext",
+          "label": "Rich text"
+        }
+      ],
+      "default": "metafield"
+    },
+    {
+      "type": "text",
+      "id": "tab_2_metafield",
+      "label": "Metafield namespace and key",
+      "info": "Example: custom.dimensions"
+    },
+    {
+      "type": "richtext",
+      "id": "tab_2_richtext",
+      "label": "Rich text content"
+    },
+    {
+      "type": "header",
+      "content": "Tab 3"
+    },
+    {
+      "type": "checkbox",
+      "id": "tab_3_enabled",
+      "label": "Enable tab 3",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "tab_3_title",
+      "label": "Tab title",
+      "default": "Manufacturer"
+    },
+    {
+      "type": "select",
+      "id": "tab_3_content_type",
+      "label": "Content type",
+      "options": [
+        {
+          "value": "metafield",
+          "label": "Metafield"
+        },
+        {
+          "value": "richtext",
+          "label": "Rich text"
+        }
+      ],
+      "default": "metafield"
+    },
+    {
+      "type": "text",
+      "id": "tab_3_metafield",
+      "label": "Metafield namespace and key",
+      "info": "Example: custom.manufacturer"
+    },
+    {
+      "type": "richtext",
+      "id": "tab_3_richtext",
+      "label": "Rich text content"
+    },
+    {
+      "type": "header",
+      "content": "Tab 4"
+    },
+    {
+      "type": "checkbox",
+      "id": "tab_4_enabled",
+      "label": "Enable tab 4",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "tab_4_title",
+      "label": "Tab title",
+      "default": "Additional Info"
+    },
+    {
+      "type": "select",
+      "id": "tab_4_content_type",
+      "label": "Content type",
+      "options": [
+        {
+          "value": "metafield",
+          "label": "Metafield"
+        },
+        {
+          "value": "richtext",
+          "label": "Rich text"
+        }
+      ],
+      "default": "metafield"
+    },
+    {
+      "type": "text",
+      "id": "tab_4_metafield",
+      "label": "Metafield namespace and key",
+      "info": "Example: custom.additional_info"
+    },
+    {
+      "type": "richtext",
+      "id": "tab_4_richtext",
+      "label": "Rich text content"
+    },
+    {
+      "type": "header",
+      "content": "Alignment"
+    },
+    {
+      "type": "select",
+      "id": "tab_alignment",
+      "label": "Tab alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "mobile_tab_alignment",
+      "label": "Mobile tab alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        },
+        {
+          "value": "stack",
+          "label": "Stack vertically"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "content_alignment",
+      "label": "Content alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Animation"
+    },
+    {
+      "type": "select",
+      "id": "animation_type",
+      "label": "Animation type",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "fade",
+          "label": "Fade in"
+        },
+        {
+          "value": "slide",
+          "label": "Slide up"
+        },
+        {
+          "value": "scale",
+          "label": "Scale in"
+        }
+      ],
+      "default": "fade"
+    },
+    {
+      "type": "range",
+      "id": "animation_duration",
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "unit": "s",
+      "label": "Animation duration",
+      "default": 0.3
+    },
+    {
+      "type": "header",
+      "content": "Tab style"
+    },
+    {
+      "type": "range",
+      "id": "tab_font_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Font size",
+      "default": 16
+    },
+    {
+      "type": "select",
+      "id": "tab_text_transform",
+      "label": "Text transform",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "uppercase",
+          "label": "Uppercase"
+        }
+      ],
+      "default": "uppercase"
+    },
+    {
+      "type": "range",
+      "id": "tab_padding_vertical",
+      "min": 4,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "label": "Vertical padding",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "tab_padding_horizontal",
+      "min": 4,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Horizontal padding",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "tab_spacing",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Tab spacing",
+      "default": 8
+    },
+    {
+      "type": "color",
+      "id": "tab_text_color",
+      "label": "Text color",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "tab_hover_color",
+      "label": "Hover color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "tab_active_color",
+      "label": "Active color",
+      "default": "#a42325"
+    },
+    {
+      "type": "header",
+      "content": "Active indicator"
+    },
+    {
+      "type": "range",
+      "id": "active_indicator_height",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "unit": "px",
+      "label": "Height",
+      "default": 2
+    },
+    {
+      "type": "color",
+      "id": "active_indicator_color",
+      "label": "Color",
+      "default": "#a42325"
+    },
+    {
+      "type": "header",
+      "content": "Border"
+    },
+    {
+      "type": "range",
+      "id": "border_width",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "label": "Width",
+      "default": 1
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Color",
+      "default": "#e6e6e6"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "range",
+      "id": "content_spacing",
+      "min": 10,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Spacing from tabs",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "content_font_size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Font size",
+      "default": 14
+    },
+    {
+      "type": "color",
+      "id": "content_text_color",
+      "label": "Text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "content_heading_color",
+      "label": "Heading color",
+      "default": "#a42325"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "section_padding",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Section padding",
+      "default": 20
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product tabs"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,618 @@
+{% doc %}
+  @prompt
+    A trust badge section where I have options for Trust badge and text placement also It is optimised for desktop and Mobile, I don't want vertical placement on mobile I just 1 trust badge with slider options on mobile, I want the section follow theme typography and colour scheme, I want you to put text under the icon
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-trust-badges-{{ ai_gen_id }} {
+    padding: {{ block.settings.section_padding_top }}px 20px {{ block.settings.section_padding_bottom }}px;
+  }
+
+  .ai-trust-badges-container-{{ ai_gen_id }} {
+    max-width: {{ block.settings.container_width }}px;
+    margin: 0 auto;
+  }
+
+  .ai-trust-badges-layout-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: {{ block.settings.spacing }}px;
+    {% if block.settings.layout == 'vertical' %}
+      flex-direction: column;
+    {% else %}
+      flex-direction: row;
+      flex-wrap: wrap;
+    {% endif %}
+  }
+
+  .ai-trust-badge-item-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: {{ block.settings.badge_text_gap }}px;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .ai-trust-badge-icon-{{ ai_gen_id }} {
+    flex-shrink: 0;
+    width: {{ block.settings.icon_size }}px;
+    height: {{ block.settings.icon_size }}px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-trust-badge-icon-{{ ai_gen_id }} img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .ai-trust-badge-icon-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(var(--color-foreground), 0.1);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-trust-badge-icon-placeholder-{{ ai_gen_id }} svg {
+    width: 60%;
+    height: 60%;
+    opacity: 0.3;
+  }
+
+  .ai-trust-badge-text-{{ ai_gen_id }} {
+    font-size: {{ block.settings.text_size }}px;
+    line-height: 1.4;
+    margin: 0;
+  }
+
+  .ai-trust-badges-slider-{{ ai_gen_id }} {
+    display: none;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-trust-badges-{{ ai_gen_id }} {
+      padding: {{ block.settings.section_padding_top_mobile }}px 16px {{ block.settings.section_padding_bottom_mobile }}px;
+    }
+
+    {% if block.settings.mobile_slider %}
+      .ai-trust-badges-layout-{{ ai_gen_id }} {
+        display: none;
+      }
+
+      .ai-trust-badges-slider-{{ ai_gen_id }} {
+        display: block;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .ai-trust-badges-slider-wrapper-{{ ai_gen_id }} {
+        display: flex;
+        transition: transform 0.3s ease;
+      }
+
+      .ai-trust-badge-slide-{{ ai_gen_id }} {
+        min-width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .ai-trust-badges-dots-{{ ai_gen_id }} {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 20px;
+      }
+
+      .ai-trust-badges-dot-{{ ai_gen_id }} {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: rgb(var(--color-foreground));
+        opacity: 0.3;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        transition: opacity 0.3s ease;
+      }
+
+      .ai-trust-badges-dot-{{ ai_gen_id }}.active {
+        opacity: 1;
+      }
+    {% else %}
+      .ai-trust-badges-layout-{{ ai_gen_id }} {
+        gap: {{ block.settings.spacing_mobile }}px;
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+    {% endif %}
+
+    .ai-trust-badge-icon-{{ ai_gen_id }} {
+      width: {{ block.settings.icon_size_mobile }}px;
+      height: {{ block.settings.icon_size_mobile }}px;
+    }
+
+    .ai-trust-badge-text-{{ ai_gen_id }} {
+      font-size: {{ block.settings.text_size_mobile }}px;
+    }
+  }
+{% endstyle %}
+
+<div class="ai-trust-badges-{{ ai_gen_id }} color-{{ block.settings.color_scheme }}" {{ block.shopify_attributes }}>
+  <div class="ai-trust-badges-container-{{ ai_gen_id }}">
+    <div class="ai-trust-badges-layout-{{ ai_gen_id }}">
+      {% for i in (1..4) %}
+        {% liquid
+          assign badge_enabled_key = 'badge_' | append: i | append: '_enabled'
+          assign badge_icon_key = 'badge_' | append: i | append: '_icon'
+          assign badge_text_key = 'badge_' | append: i | append: '_text'
+
+          assign badge_enabled = block.settings[badge_enabled_key]
+          assign badge_icon = block.settings[badge_icon_key]
+          assign badge_text = block.settings[badge_text_key]
+        %}
+
+        {% if badge_enabled %}
+          <div class="ai-trust-badge-item-{{ ai_gen_id }}">
+            <div class="ai-trust-badge-icon-{{ ai_gen_id }}">
+              {% if badge_icon %}
+                <img
+                  src="{{ badge_icon | image_url: width: 200 }}"
+                  alt="{{ badge_text | escape }}"
+                  loading="lazy"
+                  width="200"
+                  height="200"
+                >
+              {% else %}
+                <div class="ai-trust-badge-icon-placeholder-{{ ai_gen_id }}">
+                  {{ 'image' | placeholder_svg_tag }}
+                </div>
+              {% endif %}
+            </div>
+            {% if badge_text != blank %}
+              <p class="ai-trust-badge-text-{{ ai_gen_id }}">{{ badge_text }}</p>
+            {% endif %}
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <trust-badges-slider-{{ ai_gen_id }} class="ai-trust-badges-slider-{{ ai_gen_id }}">
+      <div class="ai-trust-badges-slider-wrapper-{{ ai_gen_id }}">
+        {% for i in (1..4) %}
+          {% liquid
+            assign badge_enabled_key = 'badge_' | append: i | append: '_enabled'
+            assign badge_icon_key = 'badge_' | append: i | append: '_icon'
+            assign badge_text_key = 'badge_' | append: i | append: '_text'
+
+            assign badge_enabled = block.settings[badge_enabled_key]
+            assign badge_icon = block.settings[badge_icon_key]
+            assign badge_text = block.settings[badge_text_key]
+          %}
+
+          {% if badge_enabled %}
+            <div class="ai-trust-badge-slide-{{ ai_gen_id }}">
+              <div class="ai-trust-badge-item-{{ ai_gen_id }}">
+                <div class="ai-trust-badge-icon-{{ ai_gen_id }}">
+                  {% if badge_icon %}
+                    <img
+                      src="{{ badge_icon | image_url: width: 200 }}"
+                      alt="{{ badge_text | escape }}"
+                      loading="lazy"
+                      width="200"
+                      height="200"
+                    >
+                  {% else %}
+                    <div class="ai-trust-badge-icon-placeholder-{{ ai_gen_id }}">
+                      {{ 'image' | placeholder_svg_tag }}
+                    </div>
+                  {% endif %}
+                </div>
+                {% if badge_text != blank %}
+                  <p class="ai-trust-badge-text-{{ ai_gen_id }}">{{ badge_text }}</p>
+                {% endif %}
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+      <div class="ai-trust-badges-dots-{{ ai_gen_id }}"></div>
+    </trust-badges-slider-{{ ai_gen_id }}>
+  </div>
+</div>
+
+<script>
+  (function() {
+    class TrustBadgesSlider{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+        this.currentSlide = 0;
+        this.autoplayInterval = null;
+      }
+
+      connectedCallback() {
+        this.wrapper = this.querySelector('.ai-trust-badges-slider-wrapper-{{ ai_gen_id }}');
+        this.slides = this.querySelectorAll('.ai-trust-badge-slide-{{ ai_gen_id }}');
+        this.dotsContainer = this.querySelector('.ai-trust-badges-dots-{{ ai_gen_id }}');
+        
+        if (this.slides.length <= 1) return;
+
+        this.createDots();
+        this.startAutoplay();
+        this.setupTouchEvents();
+      }
+
+      createDots() {
+        this.slides.forEach((slide, index) => {
+          const dot = document.createElement('button');
+          dot.classList.add('ai-trust-badges-dot-{{ ai_gen_id }}');
+          dot.setAttribute('aria-label', 'Go to slide ' + (index + 1));
+          if (index === 0) dot.classList.add('active');
+          
+          dot.addEventListener('click', () => {
+            this.goToSlide(index);
+            this.resetAutoplay();
+          });
+          
+          this.dotsContainer.appendChild(dot);
+        });
+        this.dots = this.querySelectorAll('.ai-trust-badges-dot-{{ ai_gen_id }}');
+      }
+
+      goToSlide(index) {
+        this.currentSlide = index;
+        this.wrapper.style.transform = `translateX(-${index * 100}%)`;
+        
+        this.dots.forEach((dot, i) => {
+          if (i === index) {
+            dot.classList.add('active');
+          } else {
+            dot.classList.remove('active');
+          }
+        });
+      }
+
+      nextSlide() {
+        this.currentSlide = (this.currentSlide + 1) % this.slides.length;
+        this.goToSlide(this.currentSlide);
+      }
+
+      startAutoplay() {
+        const autoplaySpeed = {{ block.settings.autoplay_speed | times: 1000 }};
+        if (autoplaySpeed > 0) {
+          this.autoplayInterval = setInterval(() => {
+            this.nextSlide();
+          }, autoplaySpeed);
+        }
+      }
+
+      resetAutoplay() {
+        if (this.autoplayInterval) {
+          clearInterval(this.autoplayInterval);
+          this.startAutoplay();
+        }
+      }
+
+      setupTouchEvents() {
+        let startX = 0;
+        let currentX = 0;
+        let isDragging = false;
+
+        this.addEventListener('touchstart', (e) => {
+          startX = e.touches[0].clientX;
+          isDragging = true;
+        });
+
+        this.addEventListener('touchmove', (e) => {
+          if (!isDragging) return;
+          currentX = e.touches[0].clientX;
+        });
+
+        this.addEventListener('touchend', () => {
+          if (!isDragging) return;
+          isDragging = false;
+          
+          const diff = startX - currentX;
+          if (Math.abs(diff) > 50) {
+            if (diff > 0) {
+              this.currentSlide = (this.currentSlide + 1) % this.slides.length;
+            } else {
+              this.currentSlide = (this.currentSlide - 1 + this.slides.length) % this.slides.length;
+            }
+            this.goToSlide(this.currentSlide);
+            this.resetAutoplay();
+          }
+        });
+      }
+
+      disconnectedCallback() {
+        if (this.autoplayInterval) {
+          clearInterval(this.autoplayInterval);
+        }
+      }
+    }
+
+    customElements.define('trust-badges-slider-{{ ai_gen_id }}', TrustBadgesSlider{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Trust badges",
+  "tag": null,
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Desktop layout",
+      "options": [
+        {
+          "value": "horizontal",
+          "label": "Horizontal"
+        },
+        {
+          "value": "vertical",
+          "label": "Vertical"
+        }
+      ],
+      "default": "horizontal"
+    },
+    {
+      "type": "range",
+      "id": "container_width",
+      "min": 600,
+      "max": 1400,
+      "step": 50,
+      "unit": "px",
+      "label": "Container width",
+      "default": 1200
+    },
+    {
+      "type": "header",
+      "content": "Mobile settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_slider",
+      "label": "Enable slider on mobile",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "label": "Autoplay speed",
+      "default": 3,
+      "info": "Set to 0 to disable autoplay"
+    },
+    {
+      "type": "range",
+      "id": "spacing_mobile",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "label": "Spacing between badges",
+      "default": 20,
+      "info": "Only applies when slider is disabled"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "spacing",
+      "min": 10,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "label": "Desktop spacing between badges",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "badge_text_gap",
+      "min": 5,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Gap between icon and text",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Desktop top padding",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Desktop bottom padding",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "label": "Mobile top padding",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "label": "Mobile bottom padding",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "min": 30,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "label": "Desktop icon size",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "icon_size_mobile",
+      "min": 24,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Mobile icon size",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Desktop text size",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "text_size_mobile",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile text size",
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Badge 1"
+    },
+    {
+      "type": "checkbox",
+      "id": "badge_1_enabled",
+      "label": "Enable badge 1",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "badge_1_icon",
+      "label": "Icon"
+    },
+    {
+      "type": "text",
+      "id": "badge_1_text",
+      "label": "Text",
+      "default": "Free Shipping"
+    },
+    {
+      "type": "header",
+      "content": "Badge 2"
+    },
+    {
+      "type": "checkbox",
+      "id": "badge_2_enabled",
+      "label": "Enable badge 2",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "badge_2_icon",
+      "label": "Icon"
+    },
+    {
+      "type": "text",
+      "id": "badge_2_text",
+      "label": "Text",
+      "default": "Secure Payment"
+    },
+    {
+      "type": "header",
+      "content": "Badge 3"
+    },
+    {
+      "type": "checkbox",
+      "id": "badge_3_enabled",
+      "label": "Enable badge 3",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "badge_3_icon",
+      "label": "Icon"
+    },
+    {
+      "type": "text",
+      "id": "badge_3_text",
+      "label": "Text",
+      "default": "Money Back Guarantee"
+    },
+    {
+      "type": "header",
+      "content": "Badge 4"
+    },
+    {
+      "type": "checkbox",
+      "id": "badge_4_enabled",
+      "label": "Enable badge 4",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "badge_4_icon",
+      "label": "Icon"
+    },
+    {
+      "type": "text",
+      "id": "badge_4_text",
+      "label": "Text",
+      "default": "24/7 Support"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Trust badges"
+    }
+  ]
+}
+{% endschema %}

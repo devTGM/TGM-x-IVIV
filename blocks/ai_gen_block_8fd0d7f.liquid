@@ -1,0 +1,585 @@
+{% doc %}
+  @prompt
+    I want a comparison Table where I can compare my brand with other brands in the market on different metrics, Don't want Yes No Option Want to put inputs and I need to compare with only one competitor
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-comparison-table-{{ ai_gen_id }} {
+    width: 100%;
+    overflow-x: auto;
+    padding: 40px 20px;
+    background-color: {{ block.settings.background_color }};
+  }
+
+  .ai-comparison-table__heading-{{ ai_gen_id }} {
+    text-align: center;
+    margin-bottom: 30px;
+    color: {{ block.settings.heading_color }};
+    font-size: {{ block.settings.heading_size }}px;
+  }
+
+  .ai-comparison-table__wrapper-{{ ai_gen_id }} {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .ai-comparison-table__table-{{ ai_gen_id }} {
+    width: 100%;
+    border-collapse: collapse;
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: {{ block.settings.table_background }};
+    border-radius: {{ block.settings.border_radius }}px;
+    overflow: hidden;
+  }
+
+  .ai-comparison-table__header-{{ ai_gen_id }} {
+    background-color: {{ block.settings.header_background }};
+  }
+
+  .ai-comparison-table__header-cell-{{ ai_gen_id }} {
+    padding: 20px 15px;
+    text-align: center;
+    font-weight: 600;
+    color: {{ block.settings.header_text_color }};
+    border-bottom: 2px solid {{ block.settings.border_color }};
+    font-size: {{ block.settings.header_font_size }}px;
+  }
+
+  .ai-comparison-table__header-cell-{{ ai_gen_id }}:first-child {
+    text-align: left;
+    width: 40%;
+  }
+
+  .ai-comparison-table__brand-header-{{ ai_gen_id }} {
+    background-color: {{ block.settings.your_brand_highlight }};
+    color: {{ block.settings.your_brand_text_color }};
+    position: relative;
+  }
+
+  .ai-comparison-table__badge-{{ ai_gen_id }} {
+    display: inline-block;
+    background-color: {{ block.settings.badge_background }};
+    color: {{ block.settings.badge_text_color }};
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    margin-top: 5px;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .ai-comparison-table__row-{{ ai_gen_id }} {
+    border-bottom: 1px solid {{ block.settings.border_color }};
+  }
+
+  .ai-comparison-table__row-{{ ai_gen_id }}:nth-child(even) {
+    background-color: {{ block.settings.row_alternate_background }};
+  }
+
+  .ai-comparison-table__cell-{{ ai_gen_id }} {
+    padding: 18px 15px;
+    text-align: center;
+    color: {{ block.settings.text_color }};
+    font-size: {{ block.settings.text_size }}px;
+  }
+
+  .ai-comparison-table__cell-{{ ai_gen_id }}:first-child {
+    text-align: left;
+    font-weight: 600;
+    color: {{ block.settings.metric_label_color }};
+  }
+
+  .ai-comparison-table__brand-cell-{{ ai_gen_id }} {
+    background-color: {{ block.settings.your_brand_cell_highlight }};
+    font-weight: 600;
+    color: {{ block.settings.your_brand_cell_text }};
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-comparison-table-{{ ai_gen_id }} {
+      padding: 20px 10px;
+    }
+
+    .ai-comparison-table__heading-{{ ai_gen_id }} {
+      font-size: {{ block.settings.heading_size | times: 0.7 }}px;
+      margin-bottom: 20px;
+    }
+
+    .ai-comparison-table__header-cell-{{ ai_gen_id }} {
+      padding: 15px 10px;
+      font-size: {{ block.settings.header_font_size | times: 0.85 }}px;
+    }
+
+    .ai-comparison-table__cell-{{ ai_gen_id }} {
+      padding: 12px 10px;
+      font-size: {{ block.settings.text_size | times: 0.9 }}px;
+    }
+
+    .ai-comparison-table__badge-{{ ai_gen_id }} {
+      font-size: 10px;
+      padding: 3px 8px;
+    }
+
+    .ai-comparison-table__header-cell-{{ ai_gen_id }}:first-child {
+      width: 35%;
+    }
+  }
+{% endstyle %}
+
+<div class="ai-comparison-table-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  {% if block.settings.heading != blank %}
+    <h2 class="ai-comparison-table__heading-{{ ai_gen_id }}">{{ block.settings.heading }}</h2>
+  {% endif %}
+
+  <div class="ai-comparison-table__wrapper-{{ ai_gen_id }}">
+    <table class="ai-comparison-table__table-{{ ai_gen_id }}">
+      <thead class="ai-comparison-table__header-{{ ai_gen_id }}">
+        <tr>
+          <th class="ai-comparison-table__header-cell-{{ ai_gen_id }}">{{ block.settings.metric_column_label }}</th>
+          <th class="ai-comparison-table__header-cell-{{ ai_gen_id }} ai-comparison-table__brand-header-{{ ai_gen_id }}">
+            {{ block.settings.your_brand_name }}
+            {% if block.settings.show_badge %}
+              <div class="ai-comparison-table__badge-{{ ai_gen_id }}">{{ block.settings.badge_text }}</div>
+            {% endif %}
+          </th>
+          <th class="ai-comparison-table__header-cell-{{ ai_gen_id }}">{{ block.settings.competitor_name }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for i in (1..10) %}
+          {% liquid
+            assign metric_key = 'metric_' | append: i | append: '_label'
+            assign your_brand_key = 'metric_' | append: i | append: '_your_brand'
+            assign competitor_key = 'metric_' | append: i | append: '_competitor'
+
+            assign metric_label = block.settings[metric_key]
+            assign your_brand_value = block.settings[your_brand_key]
+            assign competitor_value = block.settings[competitor_key]
+          %}
+
+          {% if metric_label != blank %}
+            <tr class="ai-comparison-table__row-{{ ai_gen_id }}">
+              <td class="ai-comparison-table__cell-{{ ai_gen_id }}">{{ metric_label }}</td>
+              <td class="ai-comparison-table__cell-{{ ai_gen_id }} ai-comparison-table__brand-cell-{{ ai_gen_id }}">
+                {{ your_brand_value }}
+              </td>
+              <td class="ai-comparison-table__cell-{{ ai_gen_id }}">
+                {{ competitor_value }}
+              </td>
+            </tr>
+          {% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Brand comparison table",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Table heading"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Why Choose Us?"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 16,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading size",
+      "default": 32
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Brand names"
+    },
+    {
+      "type": "text",
+      "id": "metric_column_label",
+      "label": "Metric column label",
+      "default": "Features"
+    },
+    {
+      "type": "text",
+      "id": "your_brand_name",
+      "label": "Your brand name",
+      "default": "Your Brand"
+    },
+    {
+      "type": "text",
+      "id": "competitor_name",
+      "label": "Competitor name",
+      "default": "Competitor"
+    },
+    {
+      "type": "header",
+      "content": "Badge"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_badge",
+      "label": "Show badge on your brand",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge text",
+      "default": "Best Choice"
+    },
+    {
+      "type": "color",
+      "id": "badge_background",
+      "label": "Badge background",
+      "default": "#a42325"
+    },
+    {
+      "type": "color",
+      "id": "badge_text_color",
+      "label": "Badge text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Metric 1"
+    },
+    {
+      "type": "text",
+      "id": "metric_1_label",
+      "label": "Metric label",
+      "default": "Premium Quality"
+    },
+    {
+      "type": "text",
+      "id": "metric_1_your_brand",
+      "label": "Your brand value",
+      "default": "100% Genuine Leather"
+    },
+    {
+      "type": "text",
+      "id": "metric_1_competitor",
+      "label": "Competitor value",
+      "default": "Synthetic Material"
+    },
+    {
+      "type": "header",
+      "content": "Metric 2"
+    },
+    {
+      "type": "text",
+      "id": "metric_2_label",
+      "label": "Metric label",
+      "default": "Warranty"
+    },
+    {
+      "type": "text",
+      "id": "metric_2_your_brand",
+      "label": "Your brand value",
+      "default": "Lifetime"
+    },
+    {
+      "type": "text",
+      "id": "metric_2_competitor",
+      "label": "Competitor value",
+      "default": "1 Year"
+    },
+    {
+      "type": "header",
+      "content": "Metric 3"
+    },
+    {
+      "type": "text",
+      "id": "metric_3_label",
+      "label": "Metric label",
+      "default": "Price"
+    },
+    {
+      "type": "text",
+      "id": "metric_3_your_brand",
+      "label": "Your brand value",
+      "default": "₹2,999"
+    },
+    {
+      "type": "text",
+      "id": "metric_3_competitor",
+      "label": "Competitor value",
+      "default": "₹3,499"
+    },
+    {
+      "type": "header",
+      "content": "Metric 4"
+    },
+    {
+      "type": "text",
+      "id": "metric_4_label",
+      "label": "Metric label",
+      "default": "Shipping"
+    },
+    {
+      "type": "text",
+      "id": "metric_4_your_brand",
+      "label": "Your brand value",
+      "default": "Free"
+    },
+    {
+      "type": "text",
+      "id": "metric_4_competitor",
+      "label": "Competitor value",
+      "default": "₹99"
+    },
+    {
+      "type": "header",
+      "content": "Metric 5"
+    },
+    {
+      "type": "text",
+      "id": "metric_5_label",
+      "label": "Metric label",
+      "default": "Customer Support"
+    },
+    {
+      "type": "text",
+      "id": "metric_5_your_brand",
+      "label": "Your brand value",
+      "default": "24/7"
+    },
+    {
+      "type": "text",
+      "id": "metric_5_competitor",
+      "label": "Competitor value",
+      "default": "Business Hours"
+    },
+    {
+      "type": "header",
+      "content": "Metric 6"
+    },
+    {
+      "type": "text",
+      "id": "metric_6_label",
+      "label": "Metric label"
+    },
+    {
+      "type": "text",
+      "id": "metric_6_your_brand",
+      "label": "Your brand value"
+    },
+    {
+      "type": "text",
+      "id": "metric_6_competitor",
+      "label": "Competitor value"
+    },
+    {
+      "type": "header",
+      "content": "Metric 7"
+    },
+    {
+      "type": "text",
+      "id": "metric_7_label",
+      "label": "Metric label"
+    },
+    {
+      "type": "text",
+      "id": "metric_7_your_brand",
+      "label": "Your brand value"
+    },
+    {
+      "type": "text",
+      "id": "metric_7_competitor",
+      "label": "Competitor value"
+    },
+    {
+      "type": "header",
+      "content": "Metric 8"
+    },
+    {
+      "type": "text",
+      "id": "metric_8_label",
+      "label": "Metric label"
+    },
+    {
+      "type": "text",
+      "id": "metric_8_your_brand",
+      "label": "Your brand value"
+    },
+    {
+      "type": "text",
+      "id": "metric_8_competitor",
+      "label": "Competitor value"
+    },
+    {
+      "type": "header",
+      "content": "Metric 9"
+    },
+    {
+      "type": "text",
+      "id": "metric_9_label",
+      "label": "Metric label"
+    },
+    {
+      "type": "text",
+      "id": "metric_9_your_brand",
+      "label": "Your brand value"
+    },
+    {
+      "type": "text",
+      "id": "metric_9_competitor",
+      "label": "Competitor value"
+    },
+    {
+      "type": "header",
+      "content": "Metric 10"
+    },
+    {
+      "type": "text",
+      "id": "metric_10_label",
+      "label": "Metric label"
+    },
+    {
+      "type": "text",
+      "id": "metric_10_your_brand",
+      "label": "Your brand value"
+    },
+    {
+      "type": "text",
+      "id": "metric_10_competitor",
+      "label": "Competitor value"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "table_background",
+      "label": "Table background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "header_background",
+      "label": "Header background",
+      "default": "#f5f5f5"
+    },
+    {
+      "type": "color",
+      "id": "header_text_color",
+      "label": "Header text",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "your_brand_highlight",
+      "label": "Your brand header background",
+      "default": "#a42325"
+    },
+    {
+      "type": "color",
+      "id": "your_brand_text_color",
+      "label": "Your brand header text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "your_brand_cell_highlight",
+      "label": "Your brand cell background",
+      "default": "#fff5f5"
+    },
+    {
+      "type": "color",
+      "id": "your_brand_cell_text",
+      "label": "Your brand cell text",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "row_alternate_background",
+      "label": "Alternate row background",
+      "default": "#fafafa"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "metric_label_color",
+      "label": "Metric label",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border",
+      "default": "#e6e6e6"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "header_font_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Header font size",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Text size",
+      "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 8
+    }
+  ],
+  "presets": [
+    {
+      "name": "Brand comparison table"
+    }
+  ]
+}
+{% endschema %}
