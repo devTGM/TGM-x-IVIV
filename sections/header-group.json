@@ -17,11 +17,11 @@
         "announcement_ryDaPf": {
           "type": "_announcement",
           "settings": {
-            "text": "Save ₹ 149 on Shipping - Prepaid Orders Only",
+            "text": "<strong>Save ₹ 149 on Shipping - Prepaid Orders Only</strong>",
             "link": "",
             "font": "var(--font-body--family)",
             "font_size": "0.75rem",
-            "weight": "",
+            "weight": "700",
             "letter_spacing": "normal",
             "case": "none"
           },
@@ -31,7 +31,7 @@
           "type": "_announcement",
           "name": "t:names.announcement",
           "settings": {
-            "text": "BUNDLE OFFER: 2 Belts for ₹999/-",
+            "text": "<strong>BUNDLE OFFER: 2 Belts for ₹999/-</strong>",
             "link": "",
             "font": "var(--font-body--family)",
             "font_size": "1rem",
