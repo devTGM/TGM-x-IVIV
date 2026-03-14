@@ -180,6 +180,7 @@
       "block_order": [
         "ai_gen_block_2ed5109_86p9jd"
       ],
+      "name": "Trust Badges",
       "settings": {
         "content_direction": "column",
         "vertical_on_mobile": true,
