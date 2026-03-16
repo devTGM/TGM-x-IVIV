@@ -138,47 +138,47 @@
     "177351110660e80708": {
       "type": "_blocks",
       "blocks": {
-        "ai_gen_block_2ed5109_86p9jd": {
-          "type": "ai_gen_block_2ed5109",
+        "ai_gen_block_6d19ac5_xNELrU": {
+          "type": "ai_gen_block_6d19ac5",
           "settings": {
             "desktop_width_percent": 100,
-            "section_padding": 15,
-            "icon_spacing": 40,
-            "text_spacing": 10,
-            "background_color": "#ffffff",
-            "text_color": "#000000",
-            "icon_size": 90,
-            "text_size": 14,
-            "text_bold": true,
-            "show_dots": false,
-            "show_arrows": false,
-            "arrow_background": "#ffffff",
-            "arrow_color": "#000000",
-            "icon_1_enabled": true,
-            "icon_1": "shopify://shop_images/vegan.png",
-            "text_1": "100% Vegan",
-            "icon_2_enabled": true,
-            "icon_2": "shopify://shop_images/free.png",
-            "text_2": "Cruelty Free",
-            "icon_3_enabled": true,
-            "icon_3": "shopify://shop_images/swap.png",
-            "text_3": "Reversible Design",
-            "icon_4_enabled": true,
-            "icon_4": "shopify://shop_images/same-day.png",
-            "text_4": "Same Day Shipping",
-            "icon_5_enabled": true,
-            "icon_5": "shopify://shop_images/satisfaction.png",
-            "text_5": "4.8 Rating",
-            "icon_6_enabled": false,
-            "text_6": "Fast Delivery",
-            "icon_7_enabled": false,
-            "text_7": "Trusted Brand"
+            "section_padding": 5,
+            "badge_spacing": 10,
+            "badge_spacing_mobile": 15,
+            "badge_padding": 5,
+            "badge_background": "#ffffff",
+            "badge_border_radius": 8,
+            "icon_text_gap": 10,
+            "icon_size": 80,
+            "icon_size_mobile": 50,
+            "title_size": 14,
+            "title_size_mobile": 12,
+            "title_color": "#000000",
+            "description_size": 12,
+            "description_size_mobile": 10,
+            "description_color": "#666666",
+            "badge_1_enabled": true,
+            "badge_1_icon": "shopify://shop_images/vegan.png",
+            "badge_1_title": "100% Vegan",
+            "badge_1_description": "",
+            "badge_2_enabled": true,
+            "badge_2_icon": "shopify://shop_images/free.png",
+            "badge_2_title": "Cruelty Free",
+            "badge_2_description": "",
+            "badge_3_enabled": true,
+            "badge_3_icon": "shopify://shop_images/satisfaction.png",
+            "badge_3_title": "4.8 Rating (Google)",
+            "badge_3_description": "",
+            "badge_4_enabled": true,
+            "badge_4_icon": "shopify://shop_images/same-day.png",
+            "badge_4_title": "Instant Shipping",
+            "badge_4_description": ""
           },
           "blocks": {}
         }
       },
       "block_order": [
-        "ai_gen_block_2ed5109_86p9jd"
+        "ai_gen_block_6d19ac5_xNELrU"
       ],
       "name": "Trust Badges",
       "settings": {
@@ -187,7 +187,7 @@
         "horizontal_alignment": "flex-start",
         "vertical_alignment": "center",
         "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "flex-start",
+        "horizontal_alignment_flex_direction_column": "center",
         "vertical_alignment_flex_direction_column": "center",
         "gap": 12,
         "section_width": "full-width",
@@ -214,6 +214,7 @@
       "blocks": {
         "image_BDkicx": {
           "type": "image",
+          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/IMG_8382_copy.jpg",
             "link": "",
