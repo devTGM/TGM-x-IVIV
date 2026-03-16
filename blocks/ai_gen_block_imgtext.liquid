@@ -1,0 +1,668 @@
+{% doc %}
+  @prompt
+    An Image with Text section with an image slideshow on one side and content on the other. Supports up to 5 slides, auto-play, navigation dots, swipe on mobile. Image can be placed left or right. Responsive stacking on mobile. Follows theme typography and color scheme.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% comment %} Count enabled slides {% endcomment %}
+{% assign slide_count = 0 %}
+{% for i in (1..5) %}
+  {% assign img_key = 'slide_image_' | append: i %}
+  {% if block.settings[img_key] != blank %}
+    {% assign slide_count = slide_count | plus: 1 %}
+  {% endif %}
+{% endfor %}
+
+{% style %}
+  .ai-imgtext-{{ ai_gen_id }} {
+    padding: {{ block.settings.section_padding_top }}px 0 {{ block.settings.section_padding_bottom }}px;
+  }
+
+  .ai-imgtext-container-{{ ai_gen_id }} {
+    max-width: {{ block.settings.container_width }}px;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    gap: {{ block.settings.content_gap }}px;
+    {% if block.settings.image_position == 'right' %}
+      flex-direction: row-reverse;
+    {% else %}
+      flex-direction: row;
+    {% endif %}
+  }
+
+  /* Image Slideshow Side */
+  .ai-imgtext-media-{{ ai_gen_id }} {
+    flex: 0 0 {{ block.settings.image_width }}%;
+    max-width: {{ block.settings.image_width }}%;
+    position: relative;
+    overflow: hidden;
+    border-radius: {{ block.settings.image_border_radius }}px;
+  }
+
+  .ai-imgtext-slider-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .ai-imgtext-slides-{{ ai_gen_id }} {
+    display: flex;
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: transform;
+  }
+
+  .ai-imgtext-slide-{{ ai_gen_id }} {
+    min-width: 100%;
+    flex-shrink: 0;
+  }
+
+  .ai-imgtext-slide-{{ ai_gen_id }} img {
+    width: 100%;
+    height: auto;
+    display: block;
+    {% if block.settings.image_ratio == 'square' %}
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+    {% elsif block.settings.image_ratio == 'portrait' %}
+      aspect-ratio: 3 / 4;
+      object-fit: cover;
+    {% elsif block.settings.image_ratio == 'landscape' %}
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+    {% else %}
+      aspect-ratio: auto;
+    {% endif %}
+  }
+
+  .ai-imgtext-dots-{{ ai_gen_id }} {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 16px;
+  }
+
+  .ai-imgtext-dot-{{ ai_gen_id }} {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: rgb(var(--color-foreground));
+    opacity: 0.25;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .ai-imgtext-dot-{{ ai_gen_id }}:hover {
+    opacity: 0.5;
+    transform: scale(1.2);
+  }
+
+  .ai-imgtext-dot-{{ ai_gen_id }}.active {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+
+  /* Arrow Navigation */
+  .ai-imgtext-arrows-{{ ai_gen_id }} {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: space-between;
+    pointer-events: none;
+    padding: 0 10px;
+    z-index: 2;
+  }
+
+  .ai-imgtext-arrow-{{ ai_gen_id }} {
+    pointer-events: auto;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(var(--color-background), 0.85);
+    color: rgb(var(--color-foreground));
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .ai-imgtext-arrow-{{ ai_gen_id }}:hover {
+    background: rgba(var(--color-background), 1);
+    transform: scale(1.1);
+  }
+
+  .ai-imgtext-arrow-{{ ai_gen_id }} svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* Content Side */
+  .ai-imgtext-content-{{ ai_gen_id }} {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 16px;
+    text-align: {{ block.settings.text_alignment }};
+  }
+
+  .ai-imgtext-subheading-{{ ai_gen_id }} {
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0.6;
+    margin: 0;
+  }
+
+  .ai-imgtext-heading-{{ ai_gen_id }} {
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  .ai-imgtext-heading-{{ ai_gen_id }} * {
+    margin: 0;
+  }
+
+  .ai-imgtext-description-{{ ai_gen_id }} {
+    margin: 0;
+    line-height: 1.7;
+    opacity: 0.85;
+  }
+
+  .ai-imgtext-description-{{ ai_gen_id }} * {
+    margin: 0;
+  }
+
+  .ai-imgtext-btn-{{ ai_gen_id }} {
+    display: inline-block;
+    padding: 14px 32px;
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid rgb(var(--color-foreground));
+    background: transparent;
+    color: rgb(var(--color-foreground));
+    cursor: pointer;
+    transition: background 0.3s ease, color 0.3s ease;
+    align-self: {{ block.settings.text_alignment == 'center' | ternary: 'center', block.settings.text_alignment == 'right' | ternary: 'flex-end', 'flex-start' }};
+    width: fit-content;
+  }
+
+  .ai-imgtext-btn-{{ ai_gen_id }}:hover {
+    background: rgb(var(--color-foreground));
+    color: rgb(var(--color-background));
+  }
+
+  /* Mobile Responsive */
+  @media screen and (max-width: 749px) {
+    .ai-imgtext-{{ ai_gen_id }} {
+      padding: {{ block.settings.section_padding_top_mobile }}px 0 {{ block.settings.section_padding_bottom_mobile }}px;
+    }
+
+    .ai-imgtext-container-{{ ai_gen_id }} {
+      flex-direction: column !important;
+      padding: 0 20px;
+      gap: 30px;
+    }
+
+    .ai-imgtext-media-{{ ai_gen_id }} {
+      flex: 0 0 100%;
+      max-width: 100%;
+    }
+
+    .ai-imgtext-content-{{ ai_gen_id }} {
+      text-align: center;
+    }
+
+    .ai-imgtext-btn-{{ ai_gen_id }} {
+      align-self: center;
+    }
+
+    .ai-imgtext-arrow-{{ ai_gen_id }} {
+      width: 30px;
+      height: 30px;
+    }
+
+    .ai-imgtext-arrow-{{ ai_gen_id }} svg {
+      width: 14px;
+      height: 14px;
+    }
+  }
+{% endstyle %}
+
+<div class="ai-imgtext-{{ ai_gen_id }} color-{{ block.settings.color_scheme }}" {{ block.shopify_attributes }}>
+  <div class="ai-imgtext-container-{{ ai_gen_id }}">
+    <!-- Image Slideshow -->
+    <div class="ai-imgtext-media-{{ ai_gen_id }}">
+      <imgtext-slider-{{ ai_gen_id }} class="ai-imgtext-slider-{{ ai_gen_id }}">
+        <div class="ai-imgtext-slides-{{ ai_gen_id }}">
+          {% for i in (1..5) %}
+            {% assign img_key = 'slide_image_' | append: i %}
+            {% assign img = block.settings[img_key] %}
+            {% if img != blank %}
+              <div class="ai-imgtext-slide-{{ ai_gen_id }}">
+                <img
+                  src="{{ img | image_url: width: 1200 }}"
+                  alt="{{ block.settings.heading | strip_html | escape }}"
+                  loading="lazy"
+                  width="1200"
+                  height="{{ 1200 | divided_by: img.aspect_ratio | round }}"
+                >
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+
+        {% if slide_count > 1 %}
+          <div class="ai-imgtext-arrows-{{ ai_gen_id }}">
+            <button class="ai-imgtext-arrow-{{ ai_gen_id }} ai-imgtext-prev-{{ ai_gen_id }}" aria-label="Previous slide">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </button>
+            <button class="ai-imgtext-arrow-{{ ai_gen_id }} ai-imgtext-next-{{ ai_gen_id }}" aria-label="Next slide">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 6 15 12 9 18"></polyline></svg>
+            </button>
+          </div>
+        {% endif %}
+      </imgtext-slider-{{ ai_gen_id }}>
+
+      {% if slide_count > 1 %}
+        <div class="ai-imgtext-dots-{{ ai_gen_id }}"></div>
+      {% endif %}
+    </div>
+
+    <!-- Text Content -->
+    <div class="ai-imgtext-content-{{ ai_gen_id }}">
+      {% if block.settings.subheading != blank %}
+        <p class="ai-imgtext-subheading-{{ ai_gen_id }}">{{ block.settings.subheading }}</p>
+      {% endif %}
+
+      {% if block.settings.heading != blank %}
+        <div class="ai-imgtext-heading-{{ ai_gen_id }}">{{ block.settings.heading }}</div>
+      {% endif %}
+
+      {% if block.settings.description != blank %}
+        <div class="ai-imgtext-description-{{ ai_gen_id }}">{{ block.settings.description }}</div>
+      {% endif %}
+
+      {% if block.settings.button_label != blank %}
+        <a
+          href="{{ block.settings.button_link }}"
+          class="ai-imgtext-btn-{{ ai_gen_id }}"
+          {% if block.settings.button_open_new_tab %}target="_blank" rel="noopener"{% endif %}
+        >
+          {{ block.settings.button_label }}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% if slide_count > 1 %}
+<script>
+  (function() {
+    class ImgtextSlider{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+        this.currentSlide = 0;
+        this.autoplayInterval = null;
+      }
+
+      connectedCallback() {
+        this.slidesWrapper = this.querySelector('.ai-imgtext-slides-{{ ai_gen_id }}');
+        this.slides = this.querySelectorAll('.ai-imgtext-slide-{{ ai_gen_id }}');
+        this.totalSlides = this.slides.length;
+
+        if (this.totalSlides <= 1) return;
+
+        this.dotsContainer = this.closest('.ai-imgtext-media-{{ ai_gen_id }}').querySelector('.ai-imgtext-dots-{{ ai_gen_id }}');
+        this.prevBtn = this.querySelector('.ai-imgtext-prev-{{ ai_gen_id }}');
+        this.nextBtn = this.querySelector('.ai-imgtext-next-{{ ai_gen_id }}');
+
+        this.createDots();
+        this.bindEvents();
+        this.startAutoplay();
+      }
+
+      createDots() {
+        if (!this.dotsContainer) return;
+        for (let i = 0; i < this.totalSlides; i++) {
+          const dot = document.createElement('button');
+          dot.classList.add('ai-imgtext-dot-{{ ai_gen_id }}');
+          dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+          if (i === 0) dot.classList.add('active');
+          dot.addEventListener('click', () => {
+            this.goToSlide(i);
+            this.resetAutoplay();
+          });
+          this.dotsContainer.appendChild(dot);
+        }
+        this.dots = this.dotsContainer.querySelectorAll('.ai-imgtext-dot-{{ ai_gen_id }}');
+      }
+
+      bindEvents() {
+        if (this.prevBtn) {
+          this.prevBtn.addEventListener('click', () => {
+            this.prevSlide();
+            this.resetAutoplay();
+          });
+        }
+        if (this.nextBtn) {
+          this.nextBtn.addEventListener('click', () => {
+            this.nextSlide();
+            this.resetAutoplay();
+          });
+        }
+        this.setupTouchEvents();
+      }
+
+      goToSlide(index) {
+        this.currentSlide = index;
+        this.slidesWrapper.style.transform = `translateX(-${index * 100}%)`;
+        if (this.dots) {
+          this.dots.forEach((dot, i) => {
+            dot.classList.toggle('active', i === index);
+          });
+        }
+      }
+
+      nextSlide() {
+        this.goToSlide((this.currentSlide + 1) % this.totalSlides);
+      }
+
+      prevSlide() {
+        this.goToSlide((this.currentSlide - 1 + this.totalSlides) % this.totalSlides);
+      }
+
+      startAutoplay() {
+        const speed = {{ block.settings.autoplay_speed | times: 1000 }};
+        if (speed > 0) {
+          this.autoplayInterval = setInterval(() => this.nextSlide(), speed);
+        }
+      }
+
+      resetAutoplay() {
+        if (this.autoplayInterval) {
+          clearInterval(this.autoplayInterval);
+          this.startAutoplay();
+        }
+      }
+
+      setupTouchEvents() {
+        let startX = 0;
+        let currentX = 0;
+        let isDragging = false;
+
+        this.addEventListener('touchstart', (e) => {
+          startX = e.touches[0].clientX;
+          isDragging = true;
+        }, { passive: true });
+
+        this.addEventListener('touchmove', (e) => {
+          if (!isDragging) return;
+          currentX = e.touches[0].clientX;
+        }, { passive: true });
+
+        this.addEventListener('touchend', () => {
+          if (!isDragging) return;
+          isDragging = false;
+          const diff = startX - currentX;
+          if (Math.abs(diff) > 50) {
+            if (diff > 0) {
+              this.nextSlide();
+            } else {
+              this.prevSlide();
+            }
+            this.resetAutoplay();
+          }
+        });
+      }
+
+      disconnectedCallback() {
+        if (this.autoplayInterval) {
+          clearInterval(this.autoplayInterval);
+        }
+      }
+    }
+
+    customElements.define('imgtext-slider-{{ ai_gen_id }}', ImgtextSlider{{ ai_gen_id }});
+  })();
+</script>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Image with Text Slides",
+  "tag": null,
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image position",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "image_width",
+      "min": 30,
+      "max": 65,
+      "step": 5,
+      "unit": "%",
+      "label": "Image width",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "content_gap",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Gap between image and content",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "container_width",
+      "min": 800,
+      "max": 1600,
+      "step": 50,
+      "unit": "px",
+      "label": "Container width",
+      "default": 1400
+    },
+    {
+      "type": "header",
+      "content": "Image settings"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image aspect ratio",
+      "options": [
+        { "value": "auto", "label": "Original" },
+        { "value": "square", "label": "Square (1:1)" },
+        { "value": "portrait", "label": "Portrait (3:4)" },
+        { "value": "landscape", "label": "Landscape (4:3)" }
+      ],
+      "default": "auto"
+    },
+    {
+      "type": "range",
+      "id": "image_border_radius",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "label": "Image border radius",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "label": "Slideshow autoplay speed",
+      "default": 4,
+      "info": "Set to 0 to disable autoplay"
+    },
+    {
+      "type": "header",
+      "content": "Slide images"
+    },
+    {
+      "type": "image_picker",
+      "id": "slide_image_1",
+      "label": "Slide 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "slide_image_2",
+      "label": "Slide 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "slide_image_3",
+      "label": "Slide 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "slide_image_4",
+      "label": "Slide 4"
+    },
+    {
+      "type": "image_picker",
+      "id": "slide_image_5",
+      "label": "Slide 5"
+    },
+    {
+      "type": "header",
+      "content": "Text content"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Our Story"
+    },
+    {
+      "type": "richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "<h2>Crafted With Purpose</h2>"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Every piece is thoughtfully designed, meticulously crafted, and made to last. We believe in creating products that tell a story — yours.</p>"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Discover More"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "checkbox",
+      "id": "button_open_new_tab",
+      "label": "Open link in new tab",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "label": "Desktop top padding",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "label": "Desktop bottom padding",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "label": "Mobile top padding",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "label": "Mobile bottom padding",
+      "default": 40
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image with Text Slides"
+    }
+  ]
+}
+{% endschema %}
