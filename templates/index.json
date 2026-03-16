@@ -352,6 +352,7 @@
         "image_BDkicx",
         "group_3mEHP8"
       ],
+      "disabled": true,
       "name": "t:names.image_with_text",
       "settings": {
         "content_direction": "row",
