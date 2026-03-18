@@ -104,7 +104,7 @@
       ],
       "settings": {
         "media_type_1": "image",
-        "image_1": "shopify://shop_images/Design-13_1.png",
+        "image_1": "shopify://shop_images/Gemini_Generated_Image_248pgy248pgy248p_1.png",
         "media_type_2": "image",
         "stack_media_on_mobile": false,
         "custom_mobile_media": true,
@@ -304,6 +304,20 @@
         "gradient_direction": "to top",
         "padding-block-start": 10,
         "padding-block-end": 10
+      }
+    },
+    "divider_9T9DHg": {
+      "type": "divider",
+      "name": "t:names.divider_section",
+      "settings": {
+        "color_scheme": "",
+        "section_width": "full-width",
+        "thickness": 2,
+        "corner_radius": "square",
+        "width_percent": 100,
+        "alignment_horizontal": "center",
+        "padding-block-start": 16,
+        "padding-block-end": 16
       }
     },
     "177367312303dd0289": {
@@ -579,20 +593,6 @@
         "gradient_direction": "to top",
         "padding-block-start": 11,
         "padding-block-end": 11
-      }
-    },
-    "divider_9T9DHg": {
-      "type": "divider",
-      "name": "t:names.divider_section",
-      "settings": {
-        "color_scheme": "",
-        "section_width": "full-width",
-        "thickness": 2,
-        "corner_radius": "square",
-        "width_percent": 100,
-        "alignment_horizontal": "center",
-        "padding-block-start": 16,
-        "padding-block-end": 16
       }
     },
     "divider_B7gpW8": {
