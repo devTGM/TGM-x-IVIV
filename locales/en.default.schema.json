@@ -146,7 +146,8 @@
     "visibility": "Visibility",
     "width": "Width",
     "width_is_automatically_optimized": "Width is automatically optimized for mobile.",
-    "app_required_for_ratings": "An app is required for product ratings. [Learn more](https://help.shopify.com/manual/apps)"
+    "app_required_for_ratings": "An app is required for product ratings. [Learn more](https://help.shopify.com/manual/apps)",
+    "hero_ratios": "Hero aspect ratios"
   },
   "html_defaults": {
     "join_our_email_list": "<h2>Join our email list</h2>",
@@ -219,7 +220,8 @@
     "video_external": "Use a YouTube or Vimeo URL",
     "pills_usage": "Used for applied filters, discount codes, and search suggestions",
     "media_type_info": "Features are populated from your menu links",
-    "transparent_header_info": "Makes the header transparent when this section is at the top of the page."
+    "transparent_header_info": "Makes the header transparent when this section is at the top of the page.",
+    "hero_ratios_info": "Forces 1920x800 aspect ratio on desktop and 750x500 on mobile."
   },
   "names": {
     "column": "Column",
@@ -737,6 +739,7 @@
     "auto_rotate_slides": "Auto-rotate slides",
     "auto_load_products": "Auto load products on scroll",
     "autoplay": "Autoplay",
+    "apply_hero_ratios": "Apply hero aspect ratios",
     "background": "Background",
     "background_color": "Background color",
     "background_overlay": "Background overlay",
