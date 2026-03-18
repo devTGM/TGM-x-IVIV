@@ -76,6 +76,7 @@
       "block_order": [
         "ai_gen_block_71caa60_BQ7dPC"
       ],
+      "name": "Hero",
       "settings": {
         "content_direction": "column",
         "vertical_on_mobile": true,
