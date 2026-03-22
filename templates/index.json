@@ -1763,6 +1763,7 @@
         "divider_JyHpVg",
         "group_fGmrE7"
       ],
+      "disabled": true,
       "name": "t:names.multicolumn",
       "settings": {
         "content_direction": "row",
@@ -1794,6 +1795,7 @@
     },
     "divider_WQhGCi": {
       "type": "divider",
+      "disabled": true,
       "name": "t:names.divider_section",
       "settings": {
         "color_scheme": "",
