@@ -127,7 +127,7 @@
             "background": false,
             "background_color": "#00000026",
             "corner_radius": 0,
-            "padding-block-start": 10,
+            "padding-block-start": 24,
             "padding-block-end": 0,
             "padding-inline-start": 0,
             "padding-inline-end": 10
@@ -168,7 +168,7 @@
             "section_padding": 0,
             "badge_spacing": 10,
             "badge_spacing_mobile": 10,
-            "badge_padding": 5,
+            "badge_padding": 20,
             "badge_background": "#ffffff",
             "badge_border_radius": 8,
             "icon_text_gap": 10,
