@@ -108,6 +108,32 @@
     "177351110660e80708": {
       "type": "_blocks",
       "blocks": {
+        "text_qgL3Dh": {
+          "type": "text",
+          "name": "t:names.heading",
+          "settings": {
+            "text": "<h2>Styled To Stand Out, Crafted To Care</h2>",
+            "width": "100%",
+            "max_width": "none",
+            "alignment": "center",
+            "type_preset": "rte",
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "var(--color-foreground)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
         "ai_gen_block_6d19ac5_xNELrU": {
           "type": "ai_gen_block_6d19ac5",
           "settings": {
@@ -148,6 +174,7 @@
         }
       },
       "block_order": [
+        "text_qgL3Dh",
         "ai_gen_block_6d19ac5_xNELrU"
       ],
       "name": "Trust Badges",
