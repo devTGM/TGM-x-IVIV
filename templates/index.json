@@ -476,8 +476,8 @@
                 "style_class": "link",
                 "width": "custom",
                 "custom_width": 22,
-                "width_mobile": "fit-content",
-                "custom_width_mobile": 100
+                "width_mobile": "custom",
+                "custom_width_mobile": 20
               },
               "blocks": {}
             }
