@@ -112,13 +112,13 @@
           "type": "text",
           "name": "t:names.heading",
           "settings": {
-            "text": "<h2><strong>Ethically Engineered Vegan Leather</strong>, Because Luxury isn't Limited to Animal Skin</h2>",
+            "text": "<h2><strong>Ethically Engineered Vegan Leather</strong>, <br/>Because Luxury isn't Limited to Animal Skin</h2>",
             "width": "100%",
-            "max_width": "none",
+            "max_width": "normal",
             "alignment": "center",
             "type_preset": "custom",
             "font": "var(--font-body--family)",
-            "font_size": "1.5rem",
+            "font_size": "1.25rem",
             "line_height": "normal",
             "letter_spacing": "normal",
             "case": "none",
@@ -128,33 +128,6 @@
             "background_color": "#00000026",
             "corner_radius": 0,
             "padding-block-start": 24,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 10
-          },
-          "blocks": {}
-        },
-        "text_Uqj7Va": {
-          "type": "text",
-          "name": "t:names.text",
-          "disabled": true,
-          "settings": {
-            "text": "<h3>Because Luxury isn't Limited to Animal Skin</h3>",
-            "width": "fit-content",
-            "max_width": "normal",
-            "alignment": "left",
-            "type_preset": "custom",
-            "font": "var(--font-body--family)",
-            "font_size": "1.125rem",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "color": "var(--color-foreground)",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,
             "padding-inline-end": 0
@@ -202,7 +175,6 @@
       },
       "block_order": [
         "text_qgL3Dh",
-        "text_Uqj7Va",
         "ai_gen_block_6d19ac5_xNELrU"
       ],
       "name": "Trust Badges",
@@ -594,7 +566,7 @@
         "horizontal_alignment": "center",
         "gap": 28,
         "color_scheme": "scheme-7",
-        "padding-block-start": 48,
+        "padding-block-start": 14,
         "padding-block-end": 48
       }
     },
