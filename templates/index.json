@@ -112,13 +112,13 @@
           "type": "text",
           "name": "t:names.heading",
           "settings": {
-            "text": "<h2>Ethically Engineered Vegan Leather</h2>",
+            "text": "<h2><strong>Ethically Engineered Vegan Leather</strong>, Because Luxury isn't Limited to Animal Skin</h2>",
             "width": "100%",
             "max_width": "none",
             "alignment": "center",
             "type_preset": "custom",
-            "font": "var(--font-heading--family)",
-            "font_size": "2rem",
+            "font": "var(--font-body--family)",
+            "font_size": "1.5rem",
             "line_height": "normal",
             "letter_spacing": "normal",
             "case": "none",
@@ -137,6 +137,7 @@
         "text_Uqj7Va": {
           "type": "text",
           "name": "t:names.text",
+          "disabled": true,
           "settings": {
             "text": "<h3>Because Luxury isn't Limited to Animal Skin</h3>",
             "width": "fit-content",
