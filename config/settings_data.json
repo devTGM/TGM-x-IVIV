@@ -9,10 +9,10 @@
  */
 {
   "current": {
-    "logo": "shopify://shop_images/IMG_5984.png",
-    "logo_height": 70,
+    "logo": "shopify://shop_images/FF_LOGO_1.png",
+    "logo_height": 100,
     "logo_height_mobile": 51,
-    "favicon": "shopify://shop_images/IMG_5984.png",
+    "favicon": "shopify://shop_images/FF_LOGO.png",
     "type_body_font": "inter_n4",
     "type_subheading_font": "inter_n5",
     "type_heading_font": "playfair_display_n4",
