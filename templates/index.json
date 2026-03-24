@@ -213,7 +213,7 @@
           "type": "ai_gen_block_f326c76",
           "settings": {
             "heading": "Shop by category",
-            "heading_size": 38,
+            "heading_size": 42,
             "heading_color": "#000000",
             "gap": 45,
             "desktop_width_percent": 100,
@@ -417,7 +417,7 @@
               "type": "_product-list-text",
               "name": "t:names.collection_title",
               "settings": {
-                "text": "<h3>{{ closest.collection.title }}</h3>",
+                "text": "<h2><strong>{{ closest.collection.title }}</strong></h2>",
                 "width": "100%",
                 "max_width": "none",
                 "alignment": "left",
@@ -2527,7 +2527,7 @@
             "stars_color": "",
             "arrows_color": "#000000",
             "transition_speed": 5,
-            "header_text": "Customers are saying",
+            "header_text": "The Verdict",
             "show_average_rating": true
           }
         }
