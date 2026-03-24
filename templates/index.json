@@ -345,7 +345,7 @@
           "static": true,
           "settings": {
             "placement": "below_image",
-            "horizontal_alignment": "flex-start",
+            "horizontal_alignment": "center",
             "vertical_alignment": "center",
             "collection_card_gap": 8,
             "inherit_color_scheme": true,
@@ -353,7 +353,7 @@
             "border": "none",
             "border_width": 1,
             "border_opacity": 100,
-            "border_radius": 0
+            "border_radius": 9
           },
           "blocks": {
             "collection_title_zeUt7U": {
