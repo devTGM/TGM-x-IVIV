@@ -38,7 +38,7 @@
             "slide_1_enabled": true,
             "slide_1_desktop_image": "shopify://shop_images/banner_1.png",
             "slide_1_mobile_image": "shopify://shop_images/banner_2.jpg",
-            "slide_1_banner_link": "shopify://collections/vegan-leather-belts",
+            "slide_1_banner_link": "shopify://collections/the-classics",
             "slide_1_heading": "",
             "slide_1_subheading": "",
             "slide_1_button_text": "",
@@ -223,7 +223,7 @@
             "border_color": "#000000",
             "text_size": 16,
             "text_color": "#000000",
-            "category_1": "vegan-leather-belts",
+            "category_1": "the-classics",
             "category_name_1": "The Classics",
             "category_2": "no-hole-micro-adjustable",
             "category_name_2": "The No-Holes",
@@ -412,7 +412,7 @@
         "collection_list": [
           "no-hole-micro-adjustable",
           "the-founders-edit",
-          "vegan-leather-belts"
+          "the-classics"
         ],
         "layout_type": "carousel",
         "carousel_on_mobile": false,
@@ -480,7 +480,7 @@
             "arrow_background": "#ffffff",
             "arrow_hover_background": "#f4f4f4",
             "arrow_color": "#000000",
-            "category_1_collection": "vegan-leather-belts",
+            "category_1_collection": "the-classics",
             "category_1_name": "The Classic Belts",
             "category_2_collection": "no-hole-micro-adjustable",
             "category_2_name": "The No-Hole Belt",
@@ -1623,7 +1623,7 @@
               "name": "t:names.image",
               "settings": {
                 "image": "shopify://shop_images/IMG_3378.jpg",
-                "link": "shopify://collections/vegan-leather-belts",
+                "link": "shopify://collections/the-classics",
                 "image_ratio": "landscape",
                 "width": "fill",
                 "custom_width": 100,
@@ -2468,7 +2468,7 @@
             "background_color": "#ffffff",
             "section_padding_top": 0,
             "section_padding_bottom": 50,
-            "collection_1": "vegan-leather-belts",
+            "collection_1": "the-classics",
             "tab_label_1": "Classic Vegan Leather Belts",
             "collection_2": "no-hole-micro-adjustable",
             "tab_label_2": "Auto-Locking Belts",
