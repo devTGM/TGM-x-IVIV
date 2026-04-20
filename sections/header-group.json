@@ -27,9 +27,24 @@
           },
           "blocks": {}
         },
+        "announcement_jmEX9a": {
+          "type": "_announcement",
+          "name": "t:names.announcement",
+          "settings": {
+            "text": "Free Shipping I 6 months warranty I Vegan",
+            "link": "",
+            "font": "var(--font-subheading--family)",
+            "font_size": "1rem",
+            "weight": "",
+            "letter_spacing": "normal",
+            "case": "none"
+          },
+          "blocks": {}
+        },
         "announcement_E7M7eC": {
           "type": "_announcement",
           "name": "t:names.announcement",
+          "disabled": true,
           "settings": {
             "text": "<strong>Free Shipping I 6 months warranty I Vegan</strong>",
             "link": "",
@@ -44,6 +59,7 @@
       },
       "block_order": [
         "announcement_ryDaPf",
+        "announcement_jmEX9a",
         "announcement_E7M7eC"
       ],
       "name": "t:names.announcement_bar",
