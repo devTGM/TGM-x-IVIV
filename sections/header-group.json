@@ -17,7 +17,7 @@
         "announcement_ryDaPf": {
           "type": "_announcement",
           "settings": {
-            "text": "<strong>Save ₹ 149 on Shipping - Prepaid Orders Only</strong>",
+            "text": "<strong>PREPAID ORDERS  - Save ₹150 + Free Express Shipping</strong>",
             "link": "",
             "font": "var(--font-body--family)",
             "font_size": "0.75rem",
@@ -31,7 +31,7 @@
           "type": "_announcement",
           "name": "t:names.announcement",
           "settings": {
-            "text": "<strong>BUNDLE OFFER: 2 Belts for ₹999/-</strong>",
+            "text": "<strong>Free Shipping I 6 months warranty I Vegan</strong>",
             "link": "",
             "font": "var(--font-body--family)",
             "font_size": "1rem",
