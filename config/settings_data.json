@@ -83,6 +83,33 @@
         "type": "shopify://apps/judge-me-reviews/blocks/judgeme_core/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
         "disabled": false,
         "settings": {}
+      },
+      "8837987693456358955": {
+        "type": "shopify://apps/google-reviews/blocks/sticky-compact-widget-block_embedded/8b378e9e-c56d-47ce-a754-feca5e0caf59",
+        "disabled": true,
+        "settings": {
+          "contentIndex": "1",
+          "variant": "rating",
+          "customContentIndex": 31,
+          "font": "default",
+          "themeId": "light",
+          "ratingType": "stars",
+          "emojiType": "0",
+          "cardColor": "#F3F6F9",
+          "starsColor": "#FBB000",
+          "textColor": "#404040",
+          "transparent": 1,
+          "solidShadow": false,
+          "verticalPositionId": "bottom",
+          "horizontalPositionId": "right",
+          "minimize": false,
+          "delay": 5
+        }
+      },
+      "13429640401162358610": {
+        "type": "shopify://apps/google-reviews/blocks/app-embed-block/4eeaae1c-902b-481c-bec5-3f32291a58d5",
+        "disabled": true,
+        "settings": {}
       }
     },
     "color_schemes": {
