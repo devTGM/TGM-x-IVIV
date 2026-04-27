@@ -43,7 +43,7 @@
             "slide_1_subheading": "",
             "slide_1_button_text": "",
             "slide_1_button_link": "",
-            "slide_2_enabled": false,
+            "slide_2_enabled": true,
             "slide_2_desktop_image": "shopify://shop_images/Desktop_Mockup.png",
             "slide_2_mobile_image": "shopify://shop_images/New_Posts.png",
             "slide_2_banner_link": "",
