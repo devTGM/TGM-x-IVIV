@@ -1315,7 +1315,7 @@
             "products": [],
             "star_rating": "all",
             "max_reviews": 20,
-            "quote_marks_size": "small",
+            "quote_marks_size": "hidden",
             "product_name_text_size": "hidden",
             "verified_badge_style": "text",
             "card_height": "medium",
